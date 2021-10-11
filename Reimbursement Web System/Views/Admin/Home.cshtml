@@ -1,0 +1,22 @@
+﻿@{ ViewBag.Title = "Home";}
+
+@{
+    System.Diagnostics.ProcessStartInfo start = new System.Diagnostics.ProcessStartInfo();
+    start.FileName = "C:\\Users\\zakir\\miniconda3\\Scripts\\ipython.exe";//cmd is full path to python.exe
+    start.Arguments = "C:\\Users\\zakir\\Downloads\\py_upwork.ipynb";//args is path to .py file and any cmd line args
+    start.UseShellExecute = false;
+    start.RedirectStandardOutput = true;
+    String resultview = "";
+    using (System.Diagnostics.Process process = System.Diagnostics.Process.Start(start))
+    {
+        using (StreamReader reader = process.StandardOutput)
+        {
+            string result = reader.ReadToEnd();
+            resultview = result;
+            Console.Write(result);
+        }
+    }
+}
+
+<h2>Home</h2>
+<p2 style="white-space: break-spaces;"> @resultview</p2>
