@@ -2,21 +2,23 @@
 
 @{
     System.Diagnostics.ProcessStartInfo start = new System.Diagnostics.ProcessStartInfo();
-    start.FileName = "C:\\Users\\zakir\\miniconda3\\Scripts\\ipython.exe";//cmd is full path to python.exe
-    start.Arguments = "C:\\Users\\zakir\\Downloads\\py_upwork.ipynb";//args is path to .py file and any cmd line args
+    String graphfile = "../graph/data2.png";//it is going to website url + then the graph folder and the graph file
+    start.FileName = @"C:\Users\zakir\miniconda3\Scripts\ipython.exe";//full path to ipython.exe
+    string pythonfile = @"""C:\Users\zakir\Documents\jupyter-python-c-\Reimbursement Web System\py_upwork.ipynb"""; ///full path to python file
+    start.Arguments = pythonfile;//args is path to .py file and any cmd line args
     start.UseShellExecute = false;
     start.RedirectStandardOutput = true;
-    String resultview = "";
+    string result = "";
     using (System.Diagnostics.Process process = System.Diagnostics.Process.Start(start))
     {
         using (StreamReader reader = process.StandardOutput)
         {
-            string result = reader.ReadToEnd();
-            resultview = result;
-            Console.Write(result);
+            result = reader.ReadToEnd();            //to test
+
         }
     }
 }
 
+
 <h2>Home</h2>
-<p2 style="white-space: break-spaces;"> @resultview</p2>
+<img style="width: 89%;" src="@graphfile" />
