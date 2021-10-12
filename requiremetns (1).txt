@@ -1,0 +1,5 @@
+miniconda
+python==3.7
+anaconda==custom
+fbprophet
+

@@ -2,7 +2,10 @@
 
 @{
     System.Diagnostics.ProcessStartInfo start = new System.Diagnostics.ProcessStartInfo();
-    String graphfile = "../graph/data2.png";//it is going to website url + then the graph folder and the graph file
+    String graphfile1 = "../graph/requests2.png";//it is going to website url + then the graph folder and the graph file requests
+    String graphfile2 = "../graph/ForecastvsActuals5.png";//it is going to website url + then the graph folder and the graph file forecast vs Actual
+
+
     start.FileName = @"C:\Users\zakir\miniconda3\Scripts\ipython.exe";//full path to ipython.exe
     string pythonfile = @"""C:\Users\zakir\Documents\jupyter-python-c-\Reimbursement Web System\py_upwork.ipynb"""; ///full path to python file
     start.Arguments = pythonfile;//args is path to .py file and any cmd line args
@@ -21,4 +24,5 @@
 
 
 <h2>Home</h2>
-<img style="width: 89%;" src="@graphfile" />
+<img style="width: 89%;" src="@graphfile1" />
+<img style="width: 89%;" src="@graphfile2" />
