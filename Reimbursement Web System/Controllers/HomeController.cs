@@ -19,6 +19,7 @@ namespace Reimbursement_Web_System.Controllers
             using (var context = new ReimbursementContext()) //initialize the database
             {
                 String hashedPassword = UtilityClass.GetHash(user.Password); //convert the password to hash
+              
                 var query = context.User.Where(s => s.Username.Equals(user.Username) && s.Password.Equals(hashedPassword)).Select(p => p); ; //verify the username and password
                 if (query.Count() > 0) //if count > 0 then the user is valid
                 {

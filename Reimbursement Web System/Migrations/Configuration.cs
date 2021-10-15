@@ -1,4 +1,5 @@
-﻿namespace Reimbursement_Web_System.Migrations
+﻿
+namespace Reimbursement_Web_System.Migrations
 {
     using System;
     using System.Data.Entity;
