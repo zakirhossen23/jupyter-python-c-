@@ -1,391 +1,398 @@
 ﻿@model Reimbursement_Web_System.Models.Ticket
 
-@{
-    ViewBag.Title = "View Ticket";
-}
+@{ ViewBag.Title = "View Ticket"; }
 
 <h2>View Ticket</h2>
 
 @using (Html.BeginForm("UpdateTicket", "Admin"))
 {
-    <div>
-        <hr />
-        <dl class="dl-horizontal">
-            @Html.HiddenFor(model => model.CRF)
-            <dt>
-                @Html.LabelFor(model => model.User.LastName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.User.LastName)
-                @Html.HiddenFor(model => model.User.LastName)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.User.FirstName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.User.FirstName)
-                @Html.HiddenFor(model => model.User.FirstName)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.DateFiled)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.DateFiled)
-                @Html.HiddenFor(model => model.DateFiled)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.Purpose)
-            </dt>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.HiddenFor(model => model.CRF)
+        <dt>
+            @Html.LabelFor(model => model.User.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.LastName)
+            @Html.HiddenFor(model => model.User.LastName)
+        </dd>
+        <dt>
+            @Html.LabelFor(model => model.User.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+            @Html.HiddenFor(model => model.User.FirstName)
+        </dd>
+        <dt>
+            @Html.LabelFor(model => model.DateFiled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateFiled)
+            @Html.HiddenFor(model => model.DateFiled)
+        </dd>
+        <dt>
+            @Html.LabelFor(model => model.Purpose)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Purpose)
-                @Html.HiddenFor(model => model.Purpose)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Purpose)
+            @Html.HiddenFor(model => model.Purpose)
+        </dd>
 
-            <dt>
-                @Html.LabelFor(model => model.Office)
-            </dt>
+        <dt>
+            @Html.LabelFor(model => model.Office)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Office)
-                @Html.HiddenFor(model => model.Office)
-            </dd>
-        </dl>
-        <div class="form-group">
-            <div style="display: flex; justify-content: space-between">
-                <div>
-                    <h3>Reimbursement</h3>
-                </div>
-            </div>
-            <table class="table table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th>Row #</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Nature of Expenditure</th>
-                        <th>Approve</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{decimal amount = 0; }
-                    @{int rowCount = 1; }
-                    @if (Model.Reimbursement != null)
-                    {
-                        for (int i = 0; i < Model.Reimbursement.Count(); i++)
-                        {
-                            @Html.HiddenFor(model => Model.Reimbursement[i].Id)
-                            @Html.HiddenFor(model => Model.Reimbursement[i].Date)
-                            @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
-                            @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
-                            <tr>
-                                <td>@rowCount</td>
-                                <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
-                                <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
-                                <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
-                                <td>
-                                    @Html.EditorFor(model => Model.Reimbursement[i].Status)
-                                </td>
-                            </tr>
-                            rowCount++;
-                            amount = Model.Reimbursement[i].Amount + amount;
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div>
-            @{
-                <h4>Total Amount: @amount.ToString("0.00")</h4>
-            }
-            <br />
-            <br />
-        </div>
-        <div>
-            @foreach (var item in Model.Medias)
-            {
-                <img src="@item.ImagePath" style="height:200px;width:200px;" />
-            }
-            <br />
-            <br />
-        </div>
-        @if (Convert.ToInt32(Session["Role"]) == 1)
-        {
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.DirectorRemarks, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.DirectorInternalComments, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) == 2)
-        {
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.HSURemarks, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.HSUInternalComments, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) == 3)
-        {
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.HRRemarks, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.HRInternalComments, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) == 4)
-        {
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.SDASRemarks, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.SDASInternalComments, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) == 5)
-        {
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.FinanceRemarks, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.FinanceInternalComments, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        <br />
-        @if (Convert.ToInt32(Session["Role"]) == 0)
-        {
-            <div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.DirectorRemarks)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.DirectorRemarks)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) != 1)
-        {
-            <div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.DirectorRemarks)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.DirectorInternalComments)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) != 2)
-        {
-            <div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.HSURemarks)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.HSUInternalComments)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) != 3)
-        {
-            <div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.HRRemarks)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.HRInternalComments)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) != 4)
-        {
-            <div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.SDASRemarks)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.SDASInternalComments)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Convert.ToInt32(Session["Role"]) != 5)
-        {
-            <div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.FinanceRemarks)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.HiddenFor(model => model.FinanceInternalComments)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-    <br />
+        <dd>
+            @Html.DisplayFor(model => model.Office)
+            @Html.HiddenFor(model => model.Office)
+        </dd>
+    </dl>
     <div class="form-group">
-        @*<button type="submit" class="btn btn-danger" id="btnLogin" name="command" value="Reject">Reject</button>*@
-        <button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Approve">Save</button>
+        <div style="display: flex; justify-content: space-between">
+            <div>
+                <h3>Reimbursement</h3>
+            </div>
+        </div>
+        <table class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>Row #</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Nature of Expenditure</th>
+                    <th>Approve</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{decimal amount = 0; }
+                @{int rowCount = 1; }
+                @if (Model.Reimbursement != null)
+                {
+                    for (int i = 0; i < Model.Reimbursement.Count(); i++)
+                    {
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Id)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Date)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
+                        <tr>
+                        <td>@rowCount</td>
+                        <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                        <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                        <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                        <td>
+                            @if (Model.Reimbursement[i].Status == true)
+                            {
+
+
+                            <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                            <input type = "button" id="reject+@i" name="@i"  onclick="reject_click(this.name)" class="btn rejectbtn2"  value="Reject"/>}
+                                        else
+                                        {
+                            <input type = "button"  id="approve+@i" name="@i"  onclick="approve_click(this.name)" class="btn approvebtn" value="Approve"/>
+                            <input type = "button"  id="reject+@i" name="@i"  onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject"/>
+                            }
+                            
+                        </td>
+                          
+                        </tr>rowCount++;
+                             amount = Model.Reimbursement[i].Amount + amount;
+                            }
+                        }
+            </tbody>
+        </table>
     </div>
-}
+    <div>
+        @{
+                            <h4>Total Amount: @amount.ToString("0.00")</h4> }
+        <br />
+        <br />
+    </div>
+    <div>
+        @foreach (var item in Model.Medias)
+        {
+<img src="@item.ImagePath" style="height:200px;width:200px;" />}
+        <br />
+        <br />
+    </div>
+    @if (Convert.ToInt32(Session["Role"]) == 1)
+    {
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DirectorRemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DirectorInternalComments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) == 2)
+    {
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HSURemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HSUInternalComments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) == 3)
+    {
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HRRemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HRInternalComments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) == 4)
+    {
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SDASRemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SDASInternalComments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) == 5)
+    {
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FinanceRemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FinanceInternalComments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>}
+    <br />
+    @if (Convert.ToInt32(Session["Role"]) == 0)
+    {
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.DirectorRemarks)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.DirectorRemarks)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) != 1)
+    {
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.DirectorRemarks)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.DirectorInternalComments)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) != 2)
+    {
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.HSURemarks)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.HSUInternalComments)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) != 3)
+    {
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.HRRemarks)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.HRInternalComments)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) != 4)
+    {
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.SDASRemarks)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.SDASInternalComments)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+    @if (Convert.ToInt32(Session["Role"]) != 5)
+    {
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.FinanceRemarks)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.FinanceInternalComments)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+</div>
+                <br />
+                                <div class="form-group">
+                                    @*<button type="submit" class="btn btn-danger" id="btnLogin" name="command" value="Reject">Reject</button>*@
+                                    <button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Approve">Save</button>
+                                </div>}
 
 @Scripts.Render("~/bundles/jquery")
 
 <script>
+    function reject_click(id) {
+        document.getElementById("reject+" + id).className = "btn btn-success rejected2"
+        document.getElementById("approve+" + id).className = "btn approvebtn"
+             
+    }
+
+    function approve_click(id) {
+     
+        document.getElementById("approve+" + id).className = "btn btn-success approved2"
+        document.getElementById("reject+" + id).className = "btn rejectbtn2"
+
+    }
     $('.reimbursement-reject').bind('click', submit_click);
 
     function submit_click(event) {
@@ -402,4 +409,41 @@
     button {
         margin-right: 10px;
     }
-</style>
+
+ 
+
+    .btn.btn-success.approved2 {
+        pointer-events: none;
+        background: #399d19;
+    }
+    .btn.btn-success.rejected2 {
+        pointer-events: none;
+        background: red;
+        border: solid 2px red;
+        color: white;
+    }
+
+    .btn.rejectbtn2 {
+        background: white;
+        border: solid 2px red;
+        color: red;
+        pointer-events: All;
+    }
+
+        .btn.rejectbtn2:hover {
+            background: red !important;
+            color: white !important;
+        }
+    .btn.approvebtn {
+        background: white;
+        border: solid 2px #399d19;
+        color: #399d19;
+        pointer-events: all;
+    }
+        .btn.approvebtn:hover {
+            background: #399d19 !important;
+            color: white !important;
+        }
+  
+
+        </style>
