@@ -112,21 +112,45 @@
         </div>
         <div>
             <div style="display: flex; ">
+                <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
                 @if (ViewBag.PageTitle == "View Ticket" && Model.Medias != null)
                 {
                     for (int i = 0; i < Model.Medias.Count(); i++)
                     {
-                        <div class="image-container" style="margin: 5px; position: relative">
-                            @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
-                            @Html.HiddenFor(model => Model.Medias[i].ImagePath)
-                            @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
-                            <button type="button" class="delete-image close" aria-label="Delete" style="top: 0; right: 0; position: absolute; padding:2px 0 2px 0;">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <img src="@Model.Medias[i].ImagePath" style="height:200px;width:200px;" />
+            <div class="image-container" style="margin: 5px; position: relative">
+                @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
+                @Html.HiddenFor(model => Model.Medias[i].ImagePath)
+                @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
+                <b class="images">
+                    <div style="display: flex;">
+                        <a href="@Model.Medias[i].ImagePath" style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;">
+                            <div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;" > </div>
+                        </a>
+                        <div style="display: flex;background: #e7e7e7;">
+                            <div style="padding: 9px 0px 0px 0px;">
+                                <k style="margin: 9px -5px 0px 5px;color: black;">national_id_card.png</k>
+                                <br>
+                                <k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">national_id_card.png</k>
+                            </div>
+                            <a  onclick="myFunction(this.id)" id="@i" class="popup" style="margin: 22px 5px -7px 7px;cursor: pointer;">
+                               
+                                    <span class="popuptext" id="myPopup">A Simple Popup!</span>
+                               
+                               
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                                </svg>
+                            </a>
                         </div>
-                    }
-                }
+                    </div>
+                </b>
+
+                @*<button type="button" class="delete-image close" aria-label="Delete" style="top: 0; right: 0; position: absolute; padding:2px 0 2px 0;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <img src="@Model.Medias[i].ImagePath" style="height:200px;width:200px;" />*@
+            </div>                    }
+                            }
             </div>
             <br />
             <br />
@@ -289,7 +313,23 @@
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
-
+<script>
+    document.body.addEventListener('click', closingfn, true);
+    function closingfn(event) {
+        if (event.currentTarget != document.getElementsByClassName("popup")){
+            var popup = document.getElementsByClassName("popuptext")
+           
+                popup[0].style.visibility = "hidden";
+            
+        }
+        
+    }
+    function myFunction(id) {
+        var popup = document.getElementsByClassName("popuptext")[id];
+        popup.classList.toggle("show");
+        console.log("clicked");
+    }
+</script>
 <script type="text/javascript">
         $(function () {
             $('.reimbursement-modal').click(function () {
@@ -312,6 +352,7 @@
                 event.currentTarget.parentElement.firstElementChild.remove();
             });
         });
+ 
 </script>
 
 <style>
@@ -337,4 +378,56 @@
     .td-DirectorRejected, .td-HSURejected, .td-HRRejected, .td-SDASRejected, .td-FinanceRejected {
         background-color: #dc3545;
     }
+
+/* Popup container - can be anything you want */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+    .popup .popuptext {
+        visibility: hidden;
+        width: 160px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 117%;
+        left: -73px;
+    }
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+    .popup .hide {
+        visibility: hidden;
+        -webkit-animation: fadeIn 1s;
+        animation: fadeIn 1s;
+    }
+
+
 </style>
