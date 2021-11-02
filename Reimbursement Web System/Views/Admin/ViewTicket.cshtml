@@ -72,33 +72,33 @@
                 {
                     for (int i = 0; i < Model.Reimbursement.Count(); i++)
                     {
-@Html.HiddenFor(model => Model.Reimbursement[i].Id)
-                        @Html.HiddenFor(model => Model.Reimbursement[i].Date)
-                                                @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
-                                                                        @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
-                                                                                                <tr>
-                                                                                                    <td>@rowCount</td>
-                                                                                                    <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
-                                                                                                    <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
-                                                                                                    <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
-                                                                                                    <td>
-                                                                                                        @if (Model.Reimbursement[i].Status == true)
-                                                                                                        {
+            @Html.HiddenFor(model => Model.Reimbursement[i].Id)
+                                    @Html.HiddenFor(model => Model.Reimbursement[i].Date)
+                                                            @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
+                                                                                    @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
+                <tr>
+                    <td>@rowCount</td>
+                    <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                    <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                    <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                    <td>
+                        @if (Model.Reimbursement[i].Status == true)
+                        {
 
 
-                                                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
-                                                                                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
-                                                                                                        else
-                                                                                                        {
-                                                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
-                                                                                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
+                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
+                                        else
+                                        {
+                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
 
-                                                                                                    </td>
+                    </td>
 
-                                                                                                </tr>rowCount++;
-                                                                                                                        amount = Model.Reimbursement[i].Amount + amount;
-                                                                                                                    }
-                                                                                                                }
+                </tr> rowCount++;
+                        amount = Model.Reimbursement[i].Amount + amount;
+                    }
+                }
             </tbody>
         </table>
     </div>
@@ -108,16 +108,25 @@
         <br />
         <br />
     </div>
-    <div>
+    <div style="display:table;">
 
 
 
 
         @foreach (var item in Model.Medias)
         {
-    <a data-lightbox="picture" href="@item.ImagePath"><img src="@item.ImagePath" style="height:200px;width:200px;" /></a>}
+    <a style="float:left" data-lightbox="picture" href="@item.ImagePath"><img src="@item.ImagePath" style="height:200px;width:200px;" /></a>}
+    
+        <div hidden>
+                @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
+    </div>
+        <div id="beforetheadd" style="float: left; width: 200px; height: 200px; ">
+        <input type="button" value="+" style="width:100%; height:100%; display:block; border:none; border-radius:30px; font-size:30px;" onclick="uploadfile();"/>
+
+        </div>
         <br />
         <br />
+     
     </div>
     @if (Convert.ToInt32(Session["Role"]) == 1)
     {
@@ -401,6 +410,24 @@
     function submit_click(event) {
         $(event.currentTarget)
     }
+    const imageupload = document.getElementById("ImagesUpload");
+    function uploadfile() {
+        imageupload.click();
+    }
+    imageupload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const result = reader.result;
+                const addbtndiv = document.getElementById("beforetheadd")
+                addbtndiv.insertAdjacentHTML('beforebegin',
+                    '<a style="float:left" data-lightbox="picture"><img src="' + result +'"style="height:200px;width:200px;" /></a>');
+            }
+            reader.readAsDataURL(file);
+
+        }
+           });
 </script>
 <!--  Popup  CSS file -->
 <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/lokesh/lightbox2/dev/dist/css/lightbox.min.css">
