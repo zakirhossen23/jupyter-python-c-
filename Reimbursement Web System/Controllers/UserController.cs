@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.IO;
 
+
 namespace Reimbursement_Web_System.Controllers
 {
     [SessionAuthorize]
@@ -119,8 +120,9 @@ namespace Reimbursement_Web_System.Controllers
                                     //collect the file path to be save in database
                                     medias.Add(new Media
                                     {
-                                        ImagePath = "/" + uploadDir + "/" + fileName
-                                    }); ;
+                                        ImagePath = "/" + uploadDir + "/" + fileName,
+                                        //UploadDate = DateTime.Now.ToString()
+                                    }) ;
                                 }
                             }
                         }
