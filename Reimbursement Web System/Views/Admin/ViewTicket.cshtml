@@ -109,10 +109,11 @@
 
                                                                                                     </td>
 
-                                                                                                </tr>rowCount++;
-                                                                                                                        amount = Model.Reimbursement[i].Amount + amount;
-                                                                                                                    }
-                                                                                                                }
+                                                                                                </tr>
+rowCount++;
+                                                                                                amount = Model.Reimbursement[i].Amount + amount;
+                                                                                            }
+                                                                                        }
             </tbody>
         </table>
     </div>
@@ -400,11 +401,38 @@
     </div>
 </div>}
 </div>
-                <br />
-                                <div class="form-group">
-                                    @*<button type="submit" class="btn btn-danger" id="btnLogin" name="command" value="Reject">Reject</button>*@
-                                    <button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Approve">Save</button>
-                                </div>}
+                <br /> <!-- Modal -->
+                                                <div id="saveModal" class="modal fade" role="dialog">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content" style="height: 100%;padding: 15% 0px 20% 0px;font-size: 30px;text-align: center;">
+                                                            <div id="show_save_message">
+
+                                                            </div>
+                                                           <script>
+                                                               function saving() {
+                                                                   const remarks1 = document.getElementsByClassName("form-control text-box multi-line")[0]
+                                                                   const remarks2 = document.getElementsByClassName("form-control text-box multi-line")[1]
+                                                                   if (remarks1.value == "" || remarks2.value == "") {
+                                                                       document.getElementById("show_save_message").innerHTML = "<h1>Remarks cannot be empty!</h1>"
+                                                                   } else {
+                                                                       document.getElementById("show_save_message").innerHTML = '<div><p>Are you sure ?</p><button type="submit" class="btn btn-success" id="btnLogin" class="btn" style="border: solid #5cb85c;width: 21%;">Yes</button><a href="#" class="btn" data-dismiss="modal" style="border: solid red;width: 21%;background: red;color: white;">No</a></div >'
+                                                                   }
+
+                                                               }
+                                                             
+                                                           </script>
+                                                             
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                                <div class="form-group">
+                                                                    @*<button type="submit" class="btn btn-danger" id="btnLogin" name="command" value="Reject">Reject</button>*@
+                                                                    <input type="button" data-toggle="modal" data-target="#saveModal" onclick="saving();" class="btn btn-success" id="btnSave" name="command" value="Save" />
+                                                                </div>
+
+}
 
 @Scripts.Render("~/bundles/jquery")
 
