@@ -422,12 +422,16 @@
                 const result = reader.result;
                 const addbtndiv = document.getElementById("beforetheadd")
                 addbtndiv.insertAdjacentHTML('beforebegin',
-                    '<a style="float:left" data-lightbox="picture"><img src="' + result +'"style="height:200px;width:200px;" /></a>');
+                    '<div style="float:left;"><a style="float:left" data-lightbox="picture"><button type="button" id="delete-image" onclick="onDelete(this);" class="delete-image close" aria-label="Delete" style="margin-left: -19px; "><span aria-hidden="true">×</span></button> <img src="' + result +'"style="height:200px;width:200px;" /></a></div>');
             }
             reader.readAsDataURL(file);
 
         }
-           });
+    });
+    function onDelete(event) {
+        event.parentElement.remove();
+    }
+   
 </script>
 <!--  Popup  CSS file -->
 <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/lokesh/lightbox2/dev/dist/css/lightbox.min.css">
