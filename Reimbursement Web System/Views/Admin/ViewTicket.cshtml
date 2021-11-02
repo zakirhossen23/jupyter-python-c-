@@ -4,12 +4,26 @@
 
 <h2>View Ticket</h2>
 
-@using (Html.BeginForm("UpdateTicket", "Admin"))
+@using (Html.BeginForm("UpdateTicket", "Admin", FormMethod.Post, new { encType = "multipart/form-data" }))
 {
 <div>
+    <section class="multi_step_form">
+        <div class="msform">
+            <!-- progressbar -->
+            <ul class="progressbar">
+                <!-- Model.Status-->
+                <li class="active">Director</li>
+                <li class="">HSU</li>
+                <li class="">HR</li>
+                <li class="">SDAS</li>
+                <li class="">Finance</li>
+            </ul>
+        </div>
+    </section>
     <hr />
     <dl class="dl-horizontal">
         @Html.HiddenFor(model => model.CRF)
+
         <dt>
             @Html.LabelFor(model => model.User.LastName)
         </dt>
@@ -72,33 +86,33 @@
                 {
                     for (int i = 0; i < Model.Reimbursement.Count(); i++)
                     {
-            @Html.HiddenFor(model => Model.Reimbursement[i].Id)
-                                    @Html.HiddenFor(model => Model.Reimbursement[i].Date)
-                                                            @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
-                                                                                    @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
-                <tr>
-                    <td>@rowCount</td>
-                    <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
-                    <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
-                    <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
-                    <td>
-                        @if (Model.Reimbursement[i].Status == true)
-                        {
+@Html.HiddenFor(model => Model.Reimbursement[i].Id)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Date)
+                                                @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
+                                                                        @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
+                                                                                                <tr>
+                                                                                                    <td>@rowCount</td>
+                                                                                                    <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                                                                                                    <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                                                                                                    <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                                                                                                    <td>
+                                                                                                        @if (Model.Reimbursement[i].Status == true)
+                                                                                                        {
 
 
-                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
-                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
-                                        else
-                                        {
-                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
-                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
+                                                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                                                                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
+                                                                                                        else
+                                                                                                        {
+                                                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                                                                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
 
-                    </td>
+                                                                                                    </td>
 
-                </tr> rowCount++;
-                        amount = Model.Reimbursement[i].Amount + amount;
-                    }
-                }
+                                                                                                </tr>rowCount++;
+                                                                                                                        amount = Model.Reimbursement[i].Amount + amount;
+                                                                                                                    }
+                                                                                                                }
             </tbody>
         </table>
     </div>
@@ -115,18 +129,20 @@
 
         @foreach (var item in Model.Medias)
         {
-    <a style="float:left" data-lightbox="picture" href="@item.ImagePath"><img src="@item.ImagePath" style="height:200px;width:200px;" /></a>}
-    
+<a style="float:left" data-lightbox="picture" href="@item.ImagePath">
+    <img src="@item.ImagePath" style="height:200px;width:200px;" />
+</a>}
+
         <div hidden>
-                @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
-    </div>
+            @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
+        </div>
         <div id="beforetheadd" style="float: left; width: 200px; height: 200px; ">
-        <input type="button" value="+" style="width:100%; height:100%; display:block; border:none; border-radius:30px; font-size:30px;" onclick="uploadfile();"/>
+            <input type="button" value="+" style="width:100%; height:100%; display:block; border:none; border-radius:30px; font-size:30px;" onclick="uploadfile();" />
 
         </div>
         <br />
         <br />
-     
+
     </div>
     @if (Convert.ToInt32(Session["Role"]) == 1)
     {
@@ -422,7 +438,7 @@
                 const result = reader.result;
                 const addbtndiv = document.getElementById("beforetheadd")
                 addbtndiv.insertAdjacentHTML('beforebegin',
-                    '<div style="float:left;"><a style="float:left" data-lightbox="picture"><button type="button" id="delete-image" onclick="onDelete(this);" class="delete-image close" aria-label="Delete" style="margin-left: -19px; "><span aria-hidden="true">×</span></button> <img src="' + result +'"style="height:200px;width:200px;" /></a></div>');
+                    '<div style="float:left;"><a style="float:left" data-lightbox="picture"><button type="button" id="delete-image" onclick="onDelete(this);" class="delete-image close" aria-label="Delete" style="margin-left: -19px; "><span aria-hidden="true">×</span></button> <img src="' + result + '"style="height:200px;width:200px;" /></a></div>');
             }
             reader.readAsDataURL(file);
 
@@ -431,7 +447,7 @@
     function onDelete(event) {
         event.parentElement.remove();
     }
-   
+
 </script>
 <!--  Popup  CSS file -->
 <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/lokesh/lightbox2/dev/dist/css/lightbox.min.css">
@@ -486,4 +502,96 @@
             background: #399d19 !important;
             color: white !important;
         }
+
+    /* for progrssbar*/
+
+    .msform {
+        text-align: center;
+        position: relative;
+        margin: 0 auto;
+        background: #ffffff;
+        z-index: 1;
+    }
+
+
+    .progressbar {
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+
+        .progressbar li {
+            list-style-type: none;
+            color: Black;
+            font-size: 15px;
+            width: calc(100%/5);
+            float: left;
+            position: relative;
+            text-align: center;
+        }
+
+
+            .progressbar li::before {
+                content: "";
+                font: normal normal normal 40px Ionicons;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                display: block;
+                background: #eaf0f4;
+                border-radius: 50%;
+                margin: 0 auto 10px auto;
+                border: 1px solid;
+                font-size: 30px;
+                text-align: center;
+            }
+
+            .progressbar li::after {
+                content: '';
+                width: 100%;
+                height: 10px;
+                background: #eaf0f4;
+                position: absolute;
+                left: -50%;
+                top: 21px;
+                font-size: 30px;
+                z-index: -1;
+                text-align: center;
+            }
+
+            .progressbar li.completed {
+                color: green;
+                font-size: 14px;
+                content: "\f383";
+                text-align: center;
+            }
+
+                .progressbar li.completed::after {
+                    background: blue;
+                    color: white;
+                    font-size: 30px;
+                    text-align: center;
+                }
+
+                .progressbar li.completed::before {
+                    background: #5cb85c;
+                    color: white;
+                    border: solid 1px blue;
+                    font-size: 30px;
+                    content: "\f383";
+                    text-align: center;
+                }
+
+            .progressbar li.active {
+                color: blue;
+                font-size: 25px;
+                font-weight: 15px;
+                text-align: center;
+            }
+
+                .progressbar li.active::after {
+                    background: blue;
+                    color: white;
+                    font-size: 30px;
+                    text-align: center;
+                }
 </style>

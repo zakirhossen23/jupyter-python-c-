@@ -22,336 +22,336 @@
         <form class="msform">
             <!-- progressbar -->
             <ul class="progressbar">
-               
-            <li class="active">Director</li>
-            <li class="">HSU</li>
-            <li class="">HR</li>
-             <li class="">SDAS</li>
-             <li class="">Finance</li>
-            </ul>           
-        </form>
-    </section>
-    </div>
-</div>}
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.DateFiled, htmlAttributes: new { @class = "control-label col-md-2", @style = "padding-top: 0px;" })
-        <div class="col-md-10">
-            @Html.DisplayFor(model => model.DateFiled, new { htmlAttributes = new { @class = "form-control DateFiled" } })
-            @Html.HiddenFor(model => model.DateFiled)
+                <!-- Model.Status-->
+                <li class="active">Director</li>
+                <li class="">HSU</li>
+                <li class="">HR</li>
+                <li class="">SDAS</li>
+                <li class="">Finance</li>
+            </ul>
+            </form>
+        </section>
         </div>
-    </div>
+    </div>}
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Purpose, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control Purpose" } })
-            @Html.ValidationMessageFor(model => model.Purpose, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Office, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Office, new { htmlAttributes = new { @class = "form-control Office" } })
-            @Html.ValidationMessageFor(model => model.Office, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div style="display: flex; justify-content: space-between">
-            <div>
-                <h4>Reimbursement</h4>
-            </div>
-            <div>
-                <button type="button" class="btn btn-info reimbursement-modal" data-toggle="modal" data-target="#reimbursementModal">
-                    Add Reimbursement
-                </button>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateFiled, htmlAttributes: new { @class = "control-label col-md-2", @style = "padding-top: 0px;" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.DateFiled, new { htmlAttributes = new { @class = "form-control DateFiled" } })
+                @Html.HiddenFor(model => model.DateFiled)
             </div>
         </div>
-        <table class="table table-striped table-condensed">
-            <thead>
-                <tr>
-                    <th>Row #</th>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Nature of Expenditure</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{decimal amount = 0; }
-                @if (ViewBag.reimbursements != null)
-                {
-                    int i = 1;
 
-                    foreach (var item in ViewBag.reimbursements)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Purpose, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control Purpose" } })
+                @Html.ValidationMessageFor(model => model.Purpose, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Office, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Office, new { htmlAttributes = new { @class = "form-control Office" } })
+                @Html.ValidationMessageFor(model => model.Office, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="display: flex; justify-content: space-between">
+                <div>
+                    <h4>Reimbursement</h4>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-info reimbursement-modal" data-toggle="modal" data-target="#reimbursementModal">
+                        Add Reimbursement
+                    </button>
+                </div>
+            </div>
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Row #</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Nature of Expenditure</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{decimal amount = 0; }
+                    @if (ViewBag.reimbursements != null)
                     {
-<tr>
-    <td>@i</td>
-    <td>@item.Date.ToString("MM/dd/yyyy")</td>
-    <td>@item.Amount.ToString("0.00")</td>
-    <td>@item.NatureOfExpenditure</td>
-    <td>
-        <span>
-            <button type="button" class="btn btn-info reimbursement-modal-update" data-toggle="modal" data-assigned-id="@i" data-target="#reimbursementModal">
-                View
-            </button>
-            @Html.ActionLink("Delete", "DeleteReimbursement", "User", new { id = i }, new { @class = "btn btn-danger" })
-        </span>
-    </td>
-</tr>i++;
-                        amount = @item.Amount + amount;
+                        int i = 1;
+
+                        foreach (var item in ViewBag.reimbursements)
+                        {
+    <tr>
+        <td>@i</td>
+        <td>@item.Date.ToString("MM/dd/yyyy")</td>
+        <td>@item.Amount.ToString("0.00")</td>
+        <td>@item.NatureOfExpenditure</td>
+        <td>
+            <span>
+                <button type="button" class="btn btn-info reimbursement-modal-update" data-toggle="modal" data-assigned-id="@i" data-target="#reimbursementModal">
+                    View
+                </button>
+                @Html.ActionLink("Delete", "DeleteReimbursement", "User", new { id = i }, new { @class = "btn btn-danger" })
+            </span>
+        </td>
+    </tr>i++;
+                            amount = @item.Amount + amount;
+                        }
+
                     }
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-left:-20px">
+            @{
+                                <h4>Total Amount: @amount.ToString("0.00")</h4> }
+            <br />
+            <br />
+        </div>
+        <div style="display:table;">
+            <div style="width: 104%;margin-left: -20px;">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
+                <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+                @if (ViewBag.PageTitle == "View Ticket" && Model.Medias != null)
+                {
+                    for (int i = 0; i < Model.Medias.Count(); i++)
+                    {
 
-                }
-            </tbody>
-        </table>
-    </div>
-    <div style="margin-left:-20px">
-        @{
-                            <h4>Total Amount: @amount.ToString("0.00")</h4> }
-        <br />
-        <br />
-    </div>
-    <div style="display:table;">
-        <div style="width: 104%;margin-left: -20px;">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
-            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-            @if (ViewBag.PageTitle == "View Ticket" && Model.Medias != null)
+
+            <div class="image-container" style="margin: 5px; float: left; position: relative">
+                @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
+                @Html.HiddenFor(model => Model.Medias[i].ImagePath)
+                @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
+
+                <button type="button" class="delete-image close" aria-label="Delete" style="top: 0; right: 0; position: absolute; ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <b class="images">
+                    <div style="display: flex;">
+                        <a href="@Model.Medias[i].ImagePath" style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;">
+                            <div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div>
+                        </a>
+                        <div style="display: flex;background: #e7e7e7;">
+                            <div style="padding: 9px 0px 0px 0px; width: 152px;">
+                                @{ string filename = ""; if (Path.GetFileName(Model.Medias[i].ImagePath).Length > 20) { filename = Path.GetFileName(Model.Medias[i].ImagePath).Substring(0, 20); } else { filename = Path.GetFileName(Model.Medias[i].ImagePath); };
+
+                                    string uploadDir = "Ticket_Images"; //server folder name
+                                    string filepath = Path.Combine(Server.MapPath("~/" + uploadDir), Path.GetFileName(Model.Medias[i].ImagePath)); FileInfo fi = new FileInfo(filepath);
+                                    long fileSizeInBytes = 0;
+                                    try
+                                    {
+                                        fileSizeInBytes = (fi.Length / 1024);
+                                    }
+                                    catch (Exception e) { }; }
+                                <k style="align-content: end;color: black;">@filename</k>
+                                <br>
+                                <k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">@fileSizeInBytes kb</k>
+                            </div>
+                            <div style="padding: 20px 7px 13px 0px; width: 21px;">
+                                <a onclick="myFunction(this.id)" id="@i" class="popup" style="cursor: pointer;">
+
+                                    <span class="popuptext" id="myPopup">
+                                        <span>@filename </span>
+                                        <br>
+                                        <span>    @fileSizeInBytes kb</span>
+                                        <br />
+                                        <span> @fi.CreationTime</span>
+                                    </span>
+
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </b>
+
+
+
+            </div>}
+                                                                            }
+            </div>
+
+
+        </div>
+        <div style="margin-left: -15px">
+            <br />
+            <br />
+            @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
+            <br />
+            <br />
+        </div>
+        <div class="form-group">
+            @if (ViewBag.PageTitle == "Create Ticket")
             {
-                for (int i = 0; i < Model.Medias.Count(); i++)
-                {
- 
-
-        <div class="image-container" style="margin: 5px; float: left; position: relative">
-            @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
-            @Html.HiddenFor(model => Model.Medias[i].ImagePath)
-            @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
-
-            <button type="button" class="delete-image close" aria-label="Delete" style="top: 0; right: 0; position: absolute; ">
-                <span aria-hidden="true">&times;</span>
-            </button>
-
-            <b class="images">
-                <div style="display: flex;">
-                    <a href="@Model.Medias[i].ImagePath" style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;">
-                        <div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div>
-                    </a>
-                    <div style="display: flex;background: #e7e7e7;">
-                        <div style="padding: 9px 0px 0px 0px; width: 152px;">
-                            @{ string filename = ""; if (Path.GetFileName(Model.Medias[i].ImagePath).Length > 20) { filename = Path.GetFileName(Model.Medias[i].ImagePath).Substring(0, 20); } else { filename = Path.GetFileName(Model.Medias[i].ImagePath); };
-
-                                string uploadDir = "Ticket_Images"; //server folder name
-                                string filepath = Path.Combine(Server.MapPath("~/" + uploadDir), Path.GetFileName(Model.Medias[i].ImagePath)); FileInfo fi = new FileInfo(filepath);
-                                long fileSizeInBytes = 0;
-                                try
-                                {
-                                    fileSizeInBytes = (fi.Length / 1024);
-                                }
-                                catch (Exception e) { }; }
-                            <k style="align-content: end;color: black;">@filename</k>
-                            <br>
-                            <k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">@fileSizeInBytes kb</k>
-                        </div>
-                        <div style="padding: 20px 7px 13px 0px; width: 21px;">
-                            <a onclick="myFunction(this.id)" id="@i" class="popup" style="cursor: pointer;">
-
-                                <span class="popuptext" id="myPopup">
-                                    <span>@filename </span>
-                                    <br>
-                                    <span>    @fileSizeInBytes kb</span>
-                                    <br />
-                                    <span> @fi.CreationTime</span>
-                                </span>
-
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
-                                </svg>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </b>
-
-
-
-        </div>}
-                                                                        }
+    <button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Create">Create</button> }
+                    else
+                    {
+    <button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Update">Update</button>}
         </div>
-
-
-    </div>
-    <div style="margin-left: -15px">
-        <br />
-        <br />
-        @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
-        <br />
-        <br />
-    </div>
-    <div class="form-group">
-        @if (ViewBag.PageTitle == "Create Ticket")
+        @if (ViewBag.PageTitle != "Create Ticket")
         {
-<button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Create">Create</button> }
-                else
-                {
-<button type="submit" class="btn btn-success" id="btnLogin" name="command" value="Update">Update</button>}
-    </div>
-    @if (ViewBag.PageTitle != "Create Ticket")
-    {
 
-<div>
-    <hr />
     <div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+        <hr />
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>}
-</div>
-}
-
-<!-- Modal -->
-<div id="reimbursementModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div id="partial"></div>
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>}
     </div>
-</div>
-
-<div id="partial"></div>
-
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-<script>
- 
-  
-    function myFunction(id) {
-        var popup = document.getElementsByClassName("popuptext")[id];
-        popup.classList.toggle("show");
-        console.log("clicked");
     }
-</script>
-<script type="text/javascript">
+
+    <!-- Modal -->
+                <div id="reimbursementModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="partial"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="partial"></div>
+
+                @Scripts.Render("~/bundles/jquery")
+                @Scripts.Render("~/bundles/bootstrap")
+                <script>
+
+
+                    function myFunction(id) {
+                        var popup = document.getElementsByClassName("popuptext")[id];
+                        popup.classList.toggle("show");
+                        console.log("clicked");
+                    }
+                </script>
+                <script type="text/javascript">
         $(function () {
             $('.reimbursement-modal').click(function () {
                 var purpose = $('.Purpose').val();
@@ -373,171 +373,173 @@
                 event.currentTarget.parentElement.firstElementChild.remove();
             });
         });
- 
-</script>
 
-<style>
-    .pill {
-        border: none;
-        color: white;
-        padding: 10px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        margin: 4px 2px;
-        border-radius: 16px;
-    }
+                </script>
 
-    .td-pending {
-        background-color: #6c757d;
-    }
+                <style>
+                    .pill {
+                        border: none;
+                        color: white;
+                        padding: 10px 10px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        margin: 4px 2px;
+                        border-radius: 16px;
+                    }
 
-    .td-DirectorApproved, .td-HSUApproved, .td-HRApproved, .td-SDASApproved, .td-FinanceApproved {
-        background-color: #28a745;
-    }
+                    .td-pending {
+                        background-color: #6c757d;
+                    }
 
-    .td-DirectorRejected, .td-HSURejected, .td-HRRejected, .td-SDASRejected, .td-FinanceRejected {
-        background-color: #dc3545;
-    }
+                    .td-DirectorApproved, .td-HSUApproved, .td-HRApproved, .td-SDASApproved, .td-FinanceApproved {
+                        background-color: #28a745;
+                    }
 
-/* Popup container - can be anything you want */
-.popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+                    .td-DirectorRejected, .td-HSURejected, .td-HRRejected, .td-SDASRejected, .td-FinanceRejected {
+                        background-color: #dc3545;
+                    }
 
-/* The actual popup */
-    .popup .popuptext {
-        visibility: hidden;
-        width: 160px;
-        background-color: #555;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 8px 0;
-        position: absolute;
-        z-index: 1;
-        bottom: 117%;
-        left: -73px;
-    }
+                    /* Popup container - can be anything you want */
+                    .popup {
+                        position: relative;
+                        display: inline-block;
+                        cursor: pointer;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                    }
 
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
+                        /* The actual popup */
+                        .popup .popuptext {
+                            visibility: hidden;
+                            width: 160px;
+                            background-color: #555;
+                            color: #fff;
+                            text-align: center;
+                            border-radius: 6px;
+                            padding: 8px 0;
+                            position: absolute;
+                            z-index: 1;
+                            bottom: 117%;
+                            left: -73px;
+                        }
 
-/* Toggle this class - hide and show the popup */
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
-}
-    .popup .hide {
-        visibility: hidden;
-        -webkit-animation: fadeIn 1s;
-        animation: fadeIn 1s;
-    }
+                            /* Popup arrow */
+                            .popup .popuptext::after {
+                                content: "";
+                                position: absolute;
+                                top: 100%;
+                                left: 50%;
+                                margin-left: -5px;
+                                border-width: 5px;
+                                border-style: solid;
+                                border-color: #555 transparent transparent transparent;
+                            }
 
+                        /* Toggle this class - hide and show the popup */
+                        .popup .show {
+                            visibility: visible;
+                            -webkit-animation: fadeIn 1s;
+                            animation: fadeIn 1s;
+                        }
 
-
-    .msform {
-        text-align: center;
-        position: relative;
-        margin: 0 auto;
-        background: #ffffff;
-        z-index: 1;
-    }
+                        .popup .hide {
+                            visibility: hidden;
+                            -webkit-animation: fadeIn 1s;
+                            animation: fadeIn 1s;
+                        }
 
 
-    .progressbar {
-        margin-bottom: 30px;
-        overflow: hidden;
 
-    }
-        .progressbar li {
-            list-style-type: none;
-            color: Black;
-            font-size: 15px;
-            width: calc(100%/5);
-            float: left;
-            position: relative;
-            text-align: center;
-        }
+                    .msform {
+                        text-align: center;
+                        position: relative;
+                        margin: 0 auto;
+                        background: #ffffff;
+                        z-index: 1;
+                    }
 
 
-            .progressbar li::before {
-                content: "";
-                font: normal normal normal 40px Ionicons;
-                width: 50px;
-                height: 50px;
-                line-height: 50px;
-                display: block;
-                background: #eaf0f4;
-                border-radius: 50%;
-                margin: 0 auto 10px auto;
-                border: 1px solid;
-                font-size: 30px;
-                text-align: center;
-            }
-            .progressbar li::after {
-                content: '';
-                width: 100%;
-                height: 10px;
-                background: #eaf0f4;
-                position: absolute;
-                left: -50%;
-                top: 21px;
-                font-size: 30px;
-                z-index: -1;
-                text-align: center;
-            }
+                    .progressbar {
+                        margin-bottom: 30px;
+                        overflow: hidden;
+                    }
 
-            .progressbar li.completed {
-                color: green;
-                font-size: 14px;
-                content: "\f383";
-                text-align: center;
-            }
-                .progressbar li.completed::after {
-                    background: blue;
-                    color: white;
-                    font-size: 30px;
-                    text-align: center;
-                }
-                .progressbar li.completed::before {
-                    background: #5cb85c;
-                    color: white;
-                    border: solid 1px blue;
-                    font-size: 30px;
-                    content: "\f383";
-                    text-align: center;
-                }
-
-            .progressbar li.active {
-                color: blue;
-                font-size: 25px;
-                font-weight: 15px;
-                text-align: center;
-            }
-        .progressbar li.active::after {
-            background: blue;
-            color: white;
-            font-size: 30px;
-            text-align: center;
-        }
-                  
+                        .progressbar li {
+                            list-style-type: none;
+                            color: Black;
+                            font-size: 15px;
+                            width: calc(100%/5);
+                            float: left;
+                            position: relative;
+                            text-align: center;
+                        }
 
 
-</style>
+                            .progressbar li::before {
+                                content: "";
+                                font: normal normal normal 40px Ionicons;
+                                width: 50px;
+                                height: 50px;
+                                line-height: 50px;
+                                display: block;
+                                background: #eaf0f4;
+                                border-radius: 50%;
+                                margin: 0 auto 10px auto;
+                                border: 1px solid;
+                                font-size: 30px;
+                                text-align: center;
+                            }
+
+                            .progressbar li::after {
+                                content: '';
+                                width: 100%;
+                                height: 10px;
+                                background: #eaf0f4;
+                                position: absolute;
+                                left: -50%;
+                                top: 21px;
+                                font-size: 30px;
+                                z-index: -1;
+                                text-align: center;
+                            }
+
+                            .progressbar li.completed {
+                                color: green;
+                                font-size: 14px;
+                                content: "\f383";
+                                text-align: center;
+                            }
+
+                                .progressbar li.completed::after {
+                                    background: blue;
+                                    color: white;
+                                    font-size: 30px;
+                                    text-align: center;
+                                }
+
+                                .progressbar li.completed::before {
+                                    background: #5cb85c;
+                                    color: white;
+                                    border: solid 1px blue;
+                                    font-size: 30px;
+                                    content: "\f383";
+                                    text-align: center;
+                                }
+
+                            .progressbar li.active {
+                                color: blue;
+                                font-size: 25px;
+                                font-weight: 15px;
+                                text-align: center;
+                            }
+
+                                .progressbar li.active::after {
+                                    background: blue;
+                                    color: white;
+                                    font-size: 30px;
+                                    text-align: center;
+                                }
+                </style>
