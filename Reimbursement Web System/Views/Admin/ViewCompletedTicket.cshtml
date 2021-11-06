@@ -84,7 +84,15 @@
                                 <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
                                 <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
                                 <td>
-                                    @Html.DisplayFor(model => Model.Reimbursement[i].Status)
+                                    @{ if (Model.Reimbursement[i].Status == true)
+                                                                {
+                                        <input type="button" id="approve+@i" disabled name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                                                    <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" /> }
+                                                                else
+                                                                {
+                                        <input type="button" id="approve+@i" name="@i" disabled onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                                                    <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" /> } }
+                                    
                                 </td>
                             </tr>
                             rowCount++;
@@ -233,4 +241,34 @@
     button {
         margin-right: 10px;
     }
+
+
+
+    /***********Status ********/
+    .btn.btn-success.approved2 {
+        pointer-events: none;
+        background: #399d19;
+    }
+
+    .btn.btn-success.rejected2 {
+        pointer-events: none;
+        background: red;
+        border: solid 2px red;
+        color: white;
+    }
+
+    .btn.rejectbtn2 {
+        background: white;
+        border: solid 2px red;
+        color: red;
+        pointer-events: All;
+    }
+
+    .btn.approvebtn {
+        background: white;
+        border: solid 2px #399d19;
+        color: #399d19;
+        pointer-events: all;
+    }
+
 </style>
