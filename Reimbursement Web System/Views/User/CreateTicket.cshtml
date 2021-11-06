@@ -23,11 +23,24 @@
             <!-- progressbar -->
             <ul class="progressbar">
                 <!-- Model.Status-->
-                <li class="active">Director</li>
-                <li class="">HSU</li>
-                <li class="">HR</li>
-                <li class="">SDAS</li>
-                <li class="">Finance</li>
+                @*@{ string directorclass = Reimbursement_Web_System.Controllers.UserController.getstatus("Director", Model.Status.ToString());
+                    string HSUclass = "";
+                    string HRclass = "";
+                    string SDASclass = "";
+                    string financeClass = "";
+
+                    if ((Model.Status) == null)
+                    {
+                        directorclass = "active";
+                    };
+
+
+                }*@
+                <li class="Rejected">Director</li>
+                <li class="Rejected">HSU</li>
+                <li class="Rejected">HR</li>
+                <li class="Rejected">SDAS</li>
+                <li class="Rejected">Finance</li>
             </ul>
             </form>
         </section>
@@ -369,7 +382,7 @@
             });
 
             $('.delete-image').click(function (event) {
-                event.currentTarget.parentElement.style.display = "none";
+                event.currentTarget.parentElement.remove();
                 event.currentTarget.parentElement.firstElementChild.remove();
             });
         });
@@ -506,21 +519,21 @@
                                 text-align: center;
                             }
 
-                            .progressbar li.completed {
+                            .progressbar li.Approved {
                                 color: green;
                                 font-size: 14px;
                                 content: "\f383";
                                 text-align: center;
                             }
 
-                                .progressbar li.completed::after {
+                                .progressbar li.Approved::after {
                                     background: blue;
                                     color: white;
                                     font-size: 30px;
                                     text-align: center;
                                 }
 
-                                .progressbar li.completed::before {
+                                .progressbar li.Approved::before {
                                     background: #5cb85c;
                                     color: white;
                                     border: solid 1px blue;
@@ -528,6 +541,31 @@
                                     content: "\f383";
                                     text-align: center;
                                 }
+
+
+                            .progressbar li.Rejected {
+                                color: Red;
+                                font-size: 14px;
+                        
+                                text-align: center;
+                            }
+
+                        .progressbar li.Rejected::after {
+                            background: blue;
+                            color: white;
+                            font-size: 30px;
+                            text-align: center;
+                        }
+
+                                .progressbar li.Rejected::before {
+                                    background: Red;
+                                    color: white;
+                                    border: solid 1px blue;
+                                    font-size: 30px;
+                                    content: "\f2d7";
+                                    text-align: center;
+                                }
+
 
                             .progressbar li.active {
                                 color: blue;

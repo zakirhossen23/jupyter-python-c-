@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using System.IO;
+using System.Diagnostics;
 
 namespace Reimbursement_Web_System.Controllers
 {
@@ -28,34 +30,34 @@ namespace Reimbursement_Web_System.Controllers
 
                 //identify what role of the user
                 //then show only related ticket
-                if (role.Equals(Role.Director)) 
+                if (role.Equals(Role.Director))
                 {
                     query = context.Ticket.Include(req => req.User)
-                        .Where(s => s.Status == null || s.Status == Status.DirectorRejected) // show tickets that doesn't have status
+                        .Where(s => s.Status == null) // show tickets that doesn't have status
                         .Select(p => p).ToList();
                 }
                 else if (role.Equals(Role.HSU))
                 {
                     query = context.Ticket.Include(req => req.User)
-                        .Where(s => s.Status == Status.DirectorApproved || s.Status == Status.HSURejected) // show tickets that director approved
+                        .Where(s => s.Status == Status.DirectorApproved || s.Status == Status.DirectorRejected) // show tickets that director approved
                         .Select(p => p).ToList();
                 }
                 else if (role.Equals(Role.HR))
                 {
                     query = context.Ticket.Include(req => req.User)
-                        .Where(s => s.Status == Status.HSUApproved || s.Status == Status.HRRejected) // show tickets that HSU approved
+                        .Where(s => s.Status == Status.HSUApproved || s.Status == Status.HSURejected) // show tickets that HSU approved
                         .Select(p => p).ToList();
                 }
                 else if (role.Equals(Role.SDAS))
                 {
                     query = context.Ticket.Include(req => req.User)
-                        .Where(s => s.Status == Status.HRApproved || s.Status == Status.SDASRejected) // show tickets that HR approved
+                        .Where(s => s.Status == Status.HRApproved || s.Status == Status.HRRejected) // show tickets that HR approved
                         .Select(p => p).ToList();
                 }
                 else if (role.Equals(Role.Finance))
                 {
                     query = context.Ticket.Include(req => req.User)
-                        .Where(s => s.Status == Status.SDASApproved || s.Status == Status.FinanceRejected) // show tickets that SDAS approved
+                        .Where(s => s.Status == Status.SDASApproved || s.Status == Status.SDASRejected) // show tickets that SDAS approved
                         .Select(p => p).ToList();
                 }
                 ViewBag.pendingTickets = query;
@@ -71,7 +73,7 @@ namespace Reimbursement_Web_System.Controllers
                 var query = context.Ticket
                     .Include(req => req.User)
                     .Include(req => req.Reimbursement)
-                    .Include(req => req.Medias)
+                    .Include(req => req.Medias)//mediasssssssssssssssssssssssssssssssssssssssssssss
                     .Where(s => s.CRF == crf)
                     .Select(p => p).SingleOrDefault();
 
@@ -118,9 +120,84 @@ namespace Reimbursement_Web_System.Controllers
             ModelState.Remove("User.Password");
 
             Role role = (Role)Session["Role"]; //get the role from the user
-
-            if (ModelState.IsValid) // if the model is valid then proceed
+            if (command == "SaveImage")
             {
+                using (var context = new ReimbursementContext()) //initialize database
+                {
+
+
+                    var dbTicket = context.Ticket
+                    .Where(x => x.CRF == ticket.CRF)
+                    .SingleOrDefault();
+
+                    var oldMedia = context.Media
+                            .Where(s => s.TicketCRF == ticket.CRF)
+                            .Select(p => p).ToList();
+
+                  
+                    if (ticket.Medias != null && ticket.Medias.Count > 0)
+                    {
+                        //readd all media except id == 0 which is deleted
+                        dbTicket.Medias.AddRange(ticket.Medias.Where(x => x.Id != 0));
+                    }
+                    //same code in create. please refer in line #108
+                    if (ticket.ImagesUpload.Count() != 0)
+                    {
+                        string uploadDir = "Ticket_Images";
+                        string fileName;
+                        foreach (var rec in ticket.ImagesUpload)
+                        {
+                            if (rec != null)
+                            {
+                                fileName = Path.GetFileName(rec.FileName);
+                                fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
+                                rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
+                                dbTicket.Medias.Add(new Media
+                                {
+                                    ImagePath = "/" + uploadDir + "/" + fileName
+                                }); ;
+                            }
+                        }
+
+
+                        //update the existing ticket to the new ticket
+                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
+
+                        //save in database
+                        context.SaveChanges();
+                    }
+
+                }
+                return View("Pending");
+            }
+            else if (command == "DeleteImage")
+            {
+                using (var context = new ReimbursementContext()) //initialize database
+                {
+
+
+                    var dbTicket = context.Ticket
+                    .Where(x => x.CRF == ticket.CRF)
+                    .SingleOrDefault();
+                    Media media = dbTicket.Medias.Where(x => x.ImagePath == ticket.Medias[0].ImagePath).FirstOrDefault();
+                    context.Media.Remove(media);
+                        //save in database
+                        context.SaveChanges();
+                    
+
+                }
+                return View("Pending");
+            }
+            else if (ModelState.IsValid) // if the model is valid then proceed
+            {
+
+                //if all Reimbursement is cancelled then marked the ticket as rejected
+                if (ticket.Reimbursement.Count(x => x.Status == false) == ticket.Reimbursement.Count())
+                {
+                    //below dont remove
+                    command = "Rejected";
+                }
+
                 using (var context = new ReimbursementContext()) //initialize database
                 {
 
@@ -147,12 +224,65 @@ namespace Reimbursement_Web_System.Controllers
                         else { ticket.Status = Status.DirectorRejected; }
                     }
                     else if (role.Equals(Role.HSU))
-                    {
+                    {//get the existing ticket
+                        var dbTicket = context.Ticket
+                            .Where(x => x.CRF == ticket.CRF)
+                            .SingleOrDefault();
+
+                        //get the existing media
+                        var oldMedia = context.Media
+                                .Where(s => s.TicketCRF == ticket.CRF)
+                                .Select(p => p).ToList();
+
+                        //delete all existing media
+                        // context.Media.RemoveRange(oldMedia);
+                        //context.SaveChanges();
+
+                        //clear the model
+                        //dbTicket.Medias.Clear();
+                        if (ticket.Medias != null && ticket.Medias.Count > 0)
+                        {
+                            //readd all media except id == 0 which is deleted
+                            dbTicket.Medias.AddRange(ticket.Medias.Where(x => x.Id != 0));
+                        }
+                        //same code in create. please refer in line #108
+                        if (ticket.ImagesUpload.Count() != 0)
+                        {
+                            string uploadDir = "Ticket_Images";
+                            string fileName;
+                            foreach (var rec in ticket.ImagesUpload)
+                            {
+                                if (rec != null)
+                                {
+                                    fileName = Path.GetFileName(rec.FileName);
+                                    fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
+                                    rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
+                                    dbTicket.Medias.Add(new Media
+                                    {
+                                        ImagePath = "/" + uploadDir + "/" + fileName
+                                    }); ;
+                                }
+                            }
+                        }
+
+                        //update the existing ticket to the new ticket
+                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
+
+                        //save in database
+                        context.SaveChanges();
+
                         if (command.Equals("Approve")) { ticket.Status = Status.HSUApproved; } // if the user is a director marked the ticket as HSUApproved
-                        else { ticket.Status = Status.HSURejected; }
+                        else
+                        {
+
+                            //below dont remove
+                            ticket.Status = Status.HSURejected;
+                        }
                     }
                     else if (role.Equals(Role.HR))
                     {
+                      
+                       
                         if (command.Equals("Approve")) { ticket.Status = Status.HRApproved; } // if the user is a director marked the ticket as HRApproved
                         else { ticket.Status = Status.HRRejected; }
                     }
@@ -175,7 +305,8 @@ namespace Reimbursement_Web_System.Controllers
                     context.SaveChanges(); // save to database
 
                     //add the event in the notification
-                    context.Notification.Add(new Notification { 
+                    context.Notification.Add(new Notification
+                    {
                         UserId = oldobj.User.Id,
                         message = ticket.Status.GetDisplayName() + " Ticket " + ticket.CRF
                     });
@@ -184,9 +315,8 @@ namespace Reimbursement_Web_System.Controllers
                 }
                 return RedirectToAction("PendingTickets", "Admin"); //redirect to PendingTickets function
             }
-            else
-            {
-                return View("ViewTicket"); //return view for validation
+            else { 
+            return View("ViewTicket"); //return view for validation
             }
         }
 

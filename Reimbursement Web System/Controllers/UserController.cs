@@ -35,7 +35,16 @@ namespace Reimbursement_Web_System.Controllers
                 return View();
             }
         }
-
+        public static string getstatus( string identifiyvalue ,string nameofvalue)
+        {
+            string approvevalue = "Approved";
+            string rejectedvalue = "Rejected";
+            if (nameofvalue.Contains("Approved"))
+            {
+                return approvevalue;
+            }
+            return rejectedvalue;
+        }
         public ActionResult CreateTicket(Ticket ticket)
         {
             ViewBag.PageTitle = "Create Ticket"; //page title
@@ -152,24 +161,13 @@ namespace Reimbursement_Web_System.Controllers
                         var dbTicket = context.Ticket
                             .Where(x => x.CRF == ticket.CRF)
                             .SingleOrDefault();
-
-                        //get the existing media
-                        var oldMedia = context.Media
-                                .Where(s => s.TicketCRF == ticket.CRF)
-                                .Select(p => p).ToList();
-
-                        //delete all existing media
-                        context.Media.RemoveRange(oldMedia);
+                        //remove all medias 
+                        var medias = context.Media
+                          .Where(s => s.Ticket.CRF == ticket.CRF)
+                          .Select(p => p).ToList();
+                        context.Media.RemoveRange(medias);
                         context.SaveChanges();
-
-                        //clear the model
-                        dbTicket.Medias.Clear();
-                        if (ticket.Medias != null && ticket.Medias.Count > 0)
-                        {
-                            //readd all media except id == 0 which is deleted
-                            dbTicket.Medias.AddRange(ticket.Medias.Where(x => x.Id != 0));
-                        }
-
+                        
                         //same code in create. please refer in line #108
                         if (ticket.ImagesUpload.Count() != 0)
                         {
@@ -185,10 +183,16 @@ namespace Reimbursement_Web_System.Controllers
                                     dbTicket.Medias.Add(new Media
                                     {
                                         ImagePath = "/" + uploadDir + "/" + fileName
-                                    }); ;
+                                    }); 
                                 }
                             }
                         }
+                        //add the medias in the media model
+                        context.Media.AddRange(ticket.Medias);
+
+                        //save the database
+                        context.SaveChanges();
+
 
                         //update the existing ticket to the new ticket
                         context.Entry(dbTicket).CurrentValues.SetValues(ticket);
