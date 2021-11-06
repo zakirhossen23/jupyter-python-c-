@@ -19,30 +19,22 @@
     <div class="col-md-10">
        <!-- Multi step form -->
     <section class="multi_step_form">
-        <form class="msform">
+        <div class="msform">
             <!-- progressbar -->
             <ul class="progressbar">
-                <!-- Model.Status-->
-                @*@{ string directorclass = Reimbursement_Web_System.Controllers.UserController.getstatus("Director", Model.Status.ToString());
-                    string HSUclass = "";
-                    string HRclass = "";
-                    string SDASclass = "";
-                    string financeClass = "";
-
-                    if ((Model.Status) == null)
+          @{
+                    if (Model.DirectorStatus == null)//Approved => Rejected => active
                     {
-                        directorclass = "active";
-                    };
-
-
-                }*@
-                <li class="Rejected">Director</li>
-                <li class="Rejected">HSU</li>
-                <li class="Rejected">HR</li>
-                <li class="Rejected">SDAS</li>
-                <li class="Rejected">Finance</li>
+                        <li class="active">Director</li>
+                    }
+                    else { <li class="@Model.DirectorStatus">Director</li>}
+                }
+                <li class="@Model.HSUStatus">HSU</li>
+                <li class="@Model.HRStatus">HR</li>
+                <li class="@Model.SDASStatus">SDAS</li>
+                <li class="@Model.FinanceStatus">Finance</li>
             </ul>
-            </form>
+            </div>
         </section>
         </div>
     </div>}
@@ -465,6 +457,7 @@
                         }
 
 
+                    /*progressbar*/
 
                     .msform {
                         text-align: center;
@@ -473,8 +466,7 @@
                         background: #ffffff;
                         z-index: 1;
                     }
-
-
+               
                     .progressbar {
                         margin-bottom: 30px;
                         overflow: hidden;

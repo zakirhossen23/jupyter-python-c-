@@ -102,6 +102,29 @@ namespace Reimbursement_Web_System.Models
         public String FinanceInternalComments { get; set; }
         public virtual List<Reimbursement> Reimbursement { get; set; }
         public virtual List<Media> Medias { get; set; }
+
+        [MaxLength(255)]
+        [Display(Name = "Director Status")]
+        public String DirectorStatus { get; set; }
+
+        [MaxLength(255)]
+        [Display(Name = "HSU Status")]
+        public String HSUStatus { get; set; }
+
+        [MaxLength(255)]
+        [Display(Name = "HR Status")]
+        public String HRStatus { get; set; }
+
+        [MaxLength(255)]
+        [Display(Name = "SDAS Status")]
+        public String SDASStatus { get; set; }
+
+        [MaxLength(255)]
+        [Display(Name = "Finance Status")]
+        public String FinanceStatus { get; set; }
+
+
+
         [NotMapped]
         public HttpPostedFileBase[] ImagesUpload { get; set; }
 

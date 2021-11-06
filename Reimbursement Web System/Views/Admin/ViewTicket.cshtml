@@ -48,6 +48,7 @@
                         @Html.DisplayFor(model => model.Office)
                         @Html.HiddenFor(model => model.Office)
                     </dd>
+
                 </dl>
 
 
@@ -60,16 +61,23 @@
 @using (Html.BeginForm("UpdateTicket", "Admin", FormMethod.Post, new { encType = "multipart/form-data" }))
 {
 <div>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
     <section class="multi_step_form">
         <div class="msform">
             <!-- progressbar -->
             <ul class="progressbar">
-                <!-- Model.Status-->
-                <li class="active">Director</li>
-                <li class="">HSU</li>
-                <li class="">HR</li>
-                <li class="">SDAS</li>
-                <li class="">Finance</li>
+                @{ if (Model.DirectorStatus == null)//Approved => Rejected => active
+                    {
+    <li class="active">Director</li> }
+                    else
+                    {
+    <li class="@Model.DirectorStatus">Director</li> } }
+                <li class="@Model.HSUStatus">HSU</li>
+                <li class="@Model.HRStatus">HR</li>
+                <li class="@Model.SDASStatus">SDAS</li>
+                <li class="@Model.FinanceStatus">Finance</li>
             </ul>
         </div>
     </section>
@@ -124,6 +132,14 @@
             @Html.DisplayFor(model => model.UpdateDateFiled)
             @Html.HiddenFor(model => model.UpdateDateFiled)
         </dd>
+        <div hidden>
+            @Html.EditorFor(model => model.DirectorStatus)
+            @Html.EditorFor(model => model.HSUStatus)
+            @Html.EditorFor(model => model.HRStatus)
+            @Html.EditorFor(model => model.SDASStatus)
+            @Html.EditorFor(model => model.FinanceStatus)
+        </div>
+
     </dl>
     <div class="form-group">
         <div style="display: flex; justify-content: space-between">
@@ -149,56 +165,56 @@
                     for (int i = 0; i < Model.Reimbursement.Count(); i++)
                     {
 
-             <tr>
-                <td>@rowCount</td>
-                <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
-                <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
-                <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
-                <td>
-                    <div hidden>
+<tr>
+    <td>@rowCount</td>
+    <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+    <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+    <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+    <td>
+        <div hidden>
 
-                        @Html.EditorFor(model => model.Reimbursement[i].TicketCRF)
-                        @Html.EditorFor(model => Model.Reimbursement[i].Id);
-                        @Html.EditorFor(model => Model.Reimbursement[i].Date);
-                        @Html.EditorFor(model => Model.Reimbursement[i].Amount);
-                        @Html.EditorFor(model => Model.Reimbursement[i].NatureOfExpenditure);
-                        @Html.EditorFor(model => Model.Reimbursement[i].Status)
-                    </div>
+            @Html.EditorFor(model => model.Reimbursement[i].TicketCRF)
+            @Html.EditorFor(model => Model.Reimbursement[i].Id);
+            @Html.EditorFor(model => Model.Reimbursement[i].Date);
+            @Html.EditorFor(model => Model.Reimbursement[i].Amount);
+            @Html.EditorFor(model => Model.Reimbursement[i].NatureOfExpenditure);
+            @Html.EditorFor(model => Model.Reimbursement[i].Status)
+        </div>
 
 
-                    @{ Reimbursement_Web_System.Models.Role userrole = (Reimbursement_Web_System.Models.Role)Session["Role"]; //get the role from the user
-                        if (userrole.Equals(Reimbursement_Web_System.Models.Role.HR))
-                        {//HR ROLE
+        @{ Reimbursement_Web_System.Models.Role userrole = (Reimbursement_Web_System.Models.Role)Session["Role"]; //get the role from the user
+            if (userrole.Equals(Reimbursement_Web_System.Models.Role.HR))
+            {//HR ROLE
+                if (Model.Reimbursement[i].Status == true)
+                {
+<input type="button" id="approve+@i" disabled name="@i" onclick="approve_click(this.name)" class="btn btn-success hrapproved2" value="Approve" />
+                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn hrrejectbtn2" value="Reject" /> }
+                            else
+                            {
+<input type="button" id="approve+@i" name="@i" disabled onclick="approve_click(this.name)" class="btn hrapprovebtn" value="Approve" />
+                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success hrrejected2" value="Reject" /> }
+                        }
+
+                        else //others admins
+                        {
                             if (Model.Reimbursement[i].Status == true)
                             {
-                <input type="button" id="approve+@i" disabled name="@i" onclick="approve_click(this.name)" class="btn btn-success hrapproved2" value="Approve" />
-                                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn hrrejectbtn2" value="Reject" /> }
-                                            else
-                                            {
-                <input type="button" id="approve+@i" name="@i" disabled onclick="approve_click(this.name)" class="btn hrapprovebtn" value="Approve" />
-                                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success hrrejected2" value="Reject" /> }
-                                        }
-
-                                        else //others admins
-                                        {
-                                            if (Model.Reimbursement[i].Status == true)
-                                            {
-                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
-                                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" /> }
-                                                                            else
-                                                                            {
-                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
-                                                                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" /> }
-                                                                                                        } }
+<input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" /> }
+                            else
+                            {
+<input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" /> }
+                        } }
 
 
-                </td>
+    </td>
 
-            </tr>
-       rowCount++;
-            amount = Model.Reimbursement[i].Amount + amount;
-        }
-    }
+</tr>
+rowCount++;
+amount = Model.Reimbursement[i].Amount + amount;
+}
+}
             </tbody>
         </table>
     </div>
@@ -215,7 +231,7 @@
             Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" });
             Html.HiddenFor(model => Model.Medias[i].ImagePath);
             Html.HiddenFor(model => Model.Medias[i].TicketCRF);
-<a style="float:left" data-lightbox="picture" >
+<a style="float:left" data-lightbox="picture">
     <img src="@Model.Medias[i].ImagePath" style="height:200px;width:200px;" />
 </a>}
 
@@ -676,6 +692,7 @@
 
 
     /* for progrssbar*/
+    /*progressbar*/
 
     .msform {
         text-align: center;
@@ -684,7 +701,6 @@
         background: #ffffff;
         z-index: 1;
     }
-
 
     .progressbar {
         margin-bottom: 30px;
@@ -730,21 +746,21 @@
                 text-align: center;
             }
 
-            .progressbar li.completed {
+            .progressbar li.Approved {
                 color: green;
                 font-size: 14px;
                 content: "\f383";
                 text-align: center;
             }
 
-                .progressbar li.completed::after {
+                .progressbar li.Approved::after {
                     background: blue;
                     color: white;
                     font-size: 30px;
                     text-align: center;
                 }
 
-                .progressbar li.completed::before {
+                .progressbar li.Approved::before {
                     background: #5cb85c;
                     color: white;
                     border: solid 1px blue;
@@ -752,6 +768,30 @@
                     content: "\f383";
                     text-align: center;
                 }
+
+
+            .progressbar li.Rejected {
+                color: Red;
+                font-size: 14px;
+                text-align: center;
+            }
+
+                .progressbar li.Rejected::after {
+                    background: blue;
+                    color: white;
+                    font-size: 30px;
+                    text-align: center;
+                }
+
+                .progressbar li.Rejected::before {
+                    background: Red;
+                    color: white;
+                    border: solid 1px blue;
+                    font-size: 30px;
+                    content: "\f2d7";
+                    text-align: center;
+                }
+
 
             .progressbar li.active {
                 color: blue;

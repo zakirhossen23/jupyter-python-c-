@@ -204,85 +204,40 @@ namespace Reimbursement_Web_System.Controllers
 
                     if (role.Equals(Role.Director))
                     {
-                        if (command.Equals("Approve")) { ticket.Status = Status.DirectorApproved; } // if the user is a director marked the ticket as DirectorApproved
-                        else { ticket.Status = Status.DirectorRejected; }
+                        if (command.Equals("Approve")) { ticket.Status = Status.DirectorApproved; ticket.DirectorStatus = "Approved"; ticket.HSUStatus = "active"; } // if the user is a director marked the ticket as DirectorApproved
+                        else { ticket.Status = Status.DirectorRejected;  ticket.DirectorStatus = "Rejected"; ticket.HSUStatus = "active"; }
                     }
                     else if (role.Equals(Role.HSU))
-                    {//get the existing ticket
-                        var dbTicket = context.Ticket
-                            .Where(x => x.CRF == ticket.CRF)
-                            .SingleOrDefault();
-
-                        //get the existing media
-                        var oldMedia = context.Media
-                                .Where(s => s.TicketCRF == ticket.CRF)
-                                .Select(p => p).ToList();
-
-                        //delete all existing media
-                        // context.Media.RemoveRange(oldMedia);
-                        //context.SaveChanges();
-
-                        //clear the model
-                        //dbTicket.Medias.Clear();
-                        if (ticket.Medias != null && ticket.Medias.Count > 0)
-                        {
-                            //readd all media except id == 0 which is deleted
-                            dbTicket.Medias.AddRange(ticket.Medias.Where(x => x.Id != 0));
-                        }
-                        //same code in create. please refer in line #108
-                        if (ticket.ImagesUpload.Count() != 0)
-                        {
-                            string uploadDir = "Ticket_Images";
-                            string fileName;
-                            foreach (var rec in ticket.ImagesUpload)
-                            {
-                                if (rec != null)
-                                {
-                                    fileName = Path.GetFileName(rec.FileName);
-                                    fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
-                                    rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
-                                    dbTicket.Medias.Add(new Media
-                                    {
-                                        ImagePath = "/" + uploadDir + "/" + fileName
-                                    }); ;
-                                }
-                            }
-                        }
-
-                        //update the existing ticket to the new ticket
-                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
-
-                        //save in database
-                        context.SaveChanges();
-
-                        if (command.Equals("Approve")) { ticket.Status = Status.HSUApproved; } // if the user is a director marked the ticket as HSUApproved
+                    {
+                        if (command.Equals("Approve")) { ticket.Status = Status.HSUApproved; ticket.HSUStatus = "Approved"; ticket.HRStatus = "active"; } // if the user is a director marked the ticket as HSUApproved
                         else
                         {
-
                             //below dont remove
                             ticket.Status = Status.HSURejected;
+                            ticket.HSUStatus = "Rejected"; ticket.HRStatus = "active";
                         }
                     }
                     else if (role.Equals(Role.HR))
                     {
                       
                        
-                        if (command.Equals("Approve")) { ticket.Status = Status.HRApproved; } // if the user is a director marked the ticket as HRApproved
-                        else { ticket.Status = Status.HRRejected; }
+                        if (command.Equals("Approve")) { ticket.Status = Status.HRApproved; ticket.HRStatus = "Approved"; ticket.SDASStatus = "active"; } // if the user is a director marked the ticket as HRApproved
+                        else { ticket.Status = Status.HRRejected; ticket.HRStatus = "Rejected"; ticket.SDASStatus = "active"; }
                     }
                     else if (role.Equals(Role.SDAS))
                     {
-                        if (command.Equals("Approve")) { ticket.Status = Status.SDASApproved; } // if the user is a director marked the ticket as SDASApproved
-                        else { ticket.Status = Status.SDASRejected; }
+                        if (command.Equals("Approve")) { ticket.Status = Status.SDASApproved; ticket.SDASStatus = "Approved"; ticket.FinanceStatus = "active"; } // if the user is a director marked the ticket as SDASApproved
+                        else { ticket.Status = Status.SDASRejected; ticket.SDASStatus = "Rejected"; ticket.FinanceStatus = "active"; }
                     }
                     else if (role.Equals(Role.Finance))
                     {
                         if (command.Equals("Approve"))
                         {
                             ticket.Status = Status.FinanceApproved;  // if the user is a director marked the ticket as FinanceApproved
+                            ticket.FinanceStatus = "Approved"; 
                             ticket.DateCompleted = DateTime.Now; // modify the data completed to date today
                         }
-                        else { ticket.Status = Status.FinanceRejected; }
+                        else { ticket.Status = Status.FinanceRejected; ticket.FinanceStatus = "Rejected"; }
                     }
                     context.Entry(oldobj).CurrentValues.SetValues(ticket); //change the old ticket to the new ticket
                     context.SaveChanges(); // save to database
