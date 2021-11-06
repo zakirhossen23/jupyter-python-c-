@@ -148,7 +148,7 @@
                 {
                     for (int i = 0; i < Model.Reimbursement.Count(); i++)
                     {
-                    
+
              <tr>
                 <td>@rowCount</td>
                 <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
@@ -156,7 +156,7 @@
                 <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
                 <td>
                     <div hidden>
-                       
+
                         @Html.EditorFor(model => model.Reimbursement[i].TicketCRF)
                         @Html.EditorFor(model => Model.Reimbursement[i].Id);
                         @Html.EditorFor(model => Model.Reimbursement[i].Date);
@@ -165,16 +165,32 @@
                         @Html.EditorFor(model => Model.Reimbursement[i].Status)
                     </div>
 
-                    @if (Model.Reimbursement[i].Status == true)
-                    {
 
+                    @{ Reimbursement_Web_System.Models.Role userrole = (Reimbursement_Web_System.Models.Role)Session["Role"]; //get the role from the user
+                        if (userrole.Equals(Reimbursement_Web_System.Models.Role.HR))
+                        {//HR ROLE
+                            if (Model.Reimbursement[i].Status == true)
+                            {
+                <input type="button" id="approve+@i" disabled name="@i" onclick="approve_click(this.name)" class="btn btn-success hrapproved2" value="Approve" />
+                                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn hrrejectbtn2" value="Reject" /> }
+                                            else
+                                            {
+                <input type="button" id="approve+@i" name="@i" disabled onclick="approve_click(this.name)" class="btn hrapprovebtn" value="Approve" />
+                                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success hrrejected2" value="Reject" /> }
+                                        }
 
-            <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
-                                        <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
-                                    else
-                                    {
-            <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
-                                        <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
+                                        else //others admins
+                                        {
+                                            if (Model.Reimbursement[i].Status == true)
+                                            {
+                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" /> }
+                                                                            else
+                                                                            {
+                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                                                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" /> }
+                                                                                                        } }
+
 
                 </td>
 
@@ -626,6 +642,38 @@
             background: #399d19 !important;
             color: white !important;
         }
+
+/***********HR Role********/
+    .btn.btn-success.hrapproved2 {
+        pointer-events: none;
+        background: #399d19;
+    }
+
+    .btn.btn-success.hrrejected2 {
+        pointer-events: none;
+        background: red;
+        border: solid 2px red;
+        color: white;
+    }
+
+    .btn.hrrejectbtn2 {
+        background: white;
+        border: solid 2px red;
+        color: red;
+        pointer-events: All;
+    }
+
+    .btn.hrapprovebtn {
+        background: white;
+        border: solid 2px #399d19;
+        color: #399d19;
+        pointer-events: all;
+    }
+
+
+
+
+
 
     /* for progrssbar*/
 
