@@ -148,34 +148,41 @@
                 {
                     for (int i = 0; i < Model.Reimbursement.Count(); i++)
                     {
-@Html.HiddenFor(model => Model.Reimbursement[i].Id)
-                        @Html.HiddenFor(model => Model.Reimbursement[i].Date)
-                                                @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
-                                                                        @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
-                                                                                                <tr>
-                                                                                                    <td>@rowCount</td>
-                                                                                                    <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
-                                                                                                    <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
-                                                                                                    <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
-                                                                                                    <td>
-                                                                                                        @if (Model.Reimbursement[i].Status == true)
-                                                                                                        {
+                    
+             <tr>
+                <td>@rowCount</td>
+                <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                <td>
+                    <div hidden>
+                       
+                        @Html.EditorFor(model => model.Reimbursement[i].TicketCRF)
+                        @Html.EditorFor(model => Model.Reimbursement[i].Id);
+                        @Html.EditorFor(model => Model.Reimbursement[i].Date);
+                        @Html.EditorFor(model => Model.Reimbursement[i].Amount);
+                        @Html.EditorFor(model => Model.Reimbursement[i].NatureOfExpenditure);
+                        @Html.EditorFor(model => Model.Reimbursement[i].Status)
+                    </div>
+
+                    @if (Model.Reimbursement[i].Status == true)
+                    {
 
 
-                                                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
-                                                                                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
-                                                                                                        else
-                                                                                                        {
-                                                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
-                                                                                                            <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
+            <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                        <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" />}
+                                    else
+                                    {
+            <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                        <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" />}
 
-                                                                                                    </td>
+                </td>
 
-                                                                                                </tr>
-                        rowCount++;
-                        amount = Model.Reimbursement[i].Amount + amount;
-                    }
-                }
+            </tr>
+       rowCount++;
+            amount = Model.Reimbursement[i].Amount + amount;
+        }
+    }
             </tbody>
         </table>
     </div>
@@ -519,14 +526,16 @@
     function reject_click(id) {
         document.getElementById("reject+" + id).className = "btn btn-success rejected2"
         document.getElementById("approve+" + id).className = "btn approvebtn"
-
+        document.getElementsByName("Reimbursement[" + id + "].Status")[0].value = "false"
+        document.getElementsByName("Reimbursement[" + id + "].Status")[1].value = "false"
     }
 
     function approve_click(id) {
 
         document.getElementById("approve+" + id).className = "btn btn-success approved2"
         document.getElementById("reject+" + id).className = "btn rejectbtn2"
-
+        document.getElementsByName("Reimbursement[" + id + "].Status")[0].value = "true"
+        document.getElementsByName("Reimbursement[" + id + "].Status")[1].value = "true"
     }
     $('.reimbursement-reject').bind('click', submit_click);
 

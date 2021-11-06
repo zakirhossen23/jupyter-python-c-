@@ -53,6 +53,7 @@ namespace Reimbursement_Web_System.Controllers
 
             ticket = new Ticket(); //create new ticket
             ticket.DateFiled = DateTime.Now; //set the ticket date filed to date today
+            ticket.UpdateDateFiled = DateTime.Now;
             ModelState.Clear(); //clear validation
             return View(ticket);
         }

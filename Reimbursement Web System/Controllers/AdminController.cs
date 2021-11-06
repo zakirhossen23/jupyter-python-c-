@@ -170,24 +170,6 @@ namespace Reimbursement_Web_System.Controllers
                 }
                 return View("Pending");
             }
-            else if (command == "DeleteImage")
-            {
-                using (var context = new ReimbursementContext()) //initialize database
-                {
-
-
-                    var dbTicket = context.Ticket
-                    .Where(x => x.CRF == ticket.CRF)
-                    .SingleOrDefault();
-                    Media media = dbTicket.Medias.Where(x => x.ImagePath == ticket.Medias[0].ImagePath).FirstOrDefault();
-                    context.Media.Remove(media);
-                        //save in database
-                        context.SaveChanges();
-                    
-
-                }
-                return View("Pending");
-            }
             else if (ModelState.IsValid) // if the model is valid then proceed
             {
 
@@ -206,6 +188,7 @@ namespace Reimbursement_Web_System.Controllers
                                 .Where(s => s.TicketCRF == ticket.CRF)
                                 .Select(p => p).ToList();
 
+           
                     //remove all the reimbursement data
                     context.Reimbursement.RemoveRange(oldReimbursement);
 
@@ -217,6 +200,7 @@ namespace Reimbursement_Web_System.Controllers
 
                     //modify the existing Reimbursement and readd the Reimbursement from the UI
                     oldobj.Reimbursement.AddRange(ticket.Reimbursement);
+
 
                     if (role.Equals(Role.Director))
                     {
@@ -300,7 +284,6 @@ namespace Reimbursement_Web_System.Controllers
                         }
                         else { ticket.Status = Status.FinanceRejected; }
                     }
-
                     context.Entry(oldobj).CurrentValues.SetValues(ticket); //change the old ticket to the new ticket
                     context.SaveChanges(); // save to database
 
@@ -310,6 +293,7 @@ namespace Reimbursement_Web_System.Controllers
                         UserId = oldobj.User.Id,
                         message = ticket.Status.GetDisplayName() + " Ticket " + ticket.CRF
                     });
+
                     context.SaveChanges();
 
                 }
