@@ -36,13 +36,23 @@ namespace Reimbursement_Web_System.Models
         [Key]
         public int CRF { get; set; }
         public virtual User User { get; set; }
+
+
         [Required]
         [Display(Name = "Date Filed")]
         [DataType(DataType.Date, ErrorMessage = "Date only")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateFiled { get; set; }
+
+
         [Display(Name = "Date Completed")]
+        [DataType(DataType.Date, ErrorMessage = "Date only")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateCompleted { get; set; }
+
+
+        [Display(Name = "Last Updated")]
+        public DateTime? UpdateDateFiled { get; set; }
         public Status? Status { get; set; }
         [MaxLength(50)]
         [Required]

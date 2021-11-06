@@ -32,32 +32,32 @@ namespace Reimbursement_Web_System.Models
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, null, null));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.DirectorApproved));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.DirectorApproved, null));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HRApproved));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HRApproved, null));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HSUApproved));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HSUApproved, null));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.SDASApproved));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.SDASApproved, null));
             }
 
             for (int i = 0; i < 15; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, DateTime.Now, Status.FinanceApproved));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, DateTime.Now, Status.FinanceApproved,null));
             }
 
             context.Ticket.AddRange(defaulTicket);
@@ -70,7 +70,8 @@ namespace Reimbursement_Web_System.Models
             base.Seed(context);
         }
 
-        private Ticket generateTicket(User user, DateTime dateFiled, DateTime? dateCompleted, Status? status) {
+        private Ticket generateTicket(User user, DateTime dateFiled, DateTime? dateCompleted, Status? status, DateTime? UpdateDateFiled)
+        {
             Ticket ticket = new Ticket
             {
                 User = user,
@@ -78,7 +79,8 @@ namespace Reimbursement_Web_System.Models
                 Purpose = "Office Supplies Reimbursement",
                 Office = "Makati City",
                 Status = status,
-                DateCompleted = dateCompleted
+                DateCompleted = dateCompleted,
+                UpdateDateFiled = UpdateDateFiled
             };
 
             return ticket;

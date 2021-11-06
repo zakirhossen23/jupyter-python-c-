@@ -192,11 +192,12 @@ namespace Reimbursement_Web_System.Controllers
 
                         //save the database
                         context.SaveChanges();
-
-
+                       //update the time
+                        dbTicket.UpdateDateFiled = DateTime.Now;
+                        ticket.UpdateDateFiled = DateTime.Now;
                         //update the existing ticket to the new ticket
                         context.Entry(dbTicket).CurrentValues.SetValues(ticket);
-
+                       
                         //save in database
                         context.SaveChanges();
 
