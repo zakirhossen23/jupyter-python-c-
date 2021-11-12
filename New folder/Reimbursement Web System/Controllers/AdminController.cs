@@ -5,8 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+
 using System.IO;
 using System.Diagnostics;
+
 
 namespace Reimbursement_Web_System.Controllers
 {
@@ -17,6 +19,58 @@ namespace Reimbursement_Web_System.Controllers
         {
             return View(); //return user home view
         }
+        public static string getdatefunc(DateTime value)
+        {
+            return value.Month + "/" + value.Day + "/" + value.Year;
+        }
+        public ActionResult PendingTicketsSearch( string search)
+        {
+
+            Role role = (Role)Session["Role"]; //get role from session
+
+            using (var context = new ReimbursementContext()) // initialize connection to dabase
+            {
+                int userId = (int)Session["UserId"]; //get user id from session
+                List<Ticket> query = null;
+              
+                //identify what role of the user
+                //then show only related ticket
+                if (role.Equals(Role.Director))
+                {
+                    query = context.Ticket.Include(req => req.User)
+                       .AsEnumerable().Where(s => s.Status == null).Where(s=>s.CRF.ToString().Contains(search) || s.User.FirstName.ToString().Contains(search) || s.User.LastName.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)) // show tickets that doesn't have status
+                        .ToList();
+                }
+                else if (role.Equals(Role.HSU))
+                {
+                    query = context.Ticket.Include(req => req.User)
+                        .AsEnumerable().Where(s => s.Status == Status.DirectorApproved || s.Status == Status.DirectorRejected).Where(s => s.CRF.ToString().Contains(search) || s.User.FirstName.ToString().Contains(search) || s.User.LastName.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)) // show tickets that director approved
+                        .Select(p => p).ToList();
+                }
+                else if (role.Equals(Role.HR))
+                {
+                    query = context.Ticket.Include(req => req.User)
+                       .AsEnumerable().Where(s => s.Status == Status.HSUApproved || s.Status == Status.HSURejected).Where(s => s.CRF.ToString().Contains(search) || s.User.FirstName.ToString().Contains(search) || s.User.LastName.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)) // show tickets that HSU approved
+                        .Select(p => p).ToList();
+                }
+                else if (role.Equals(Role.SDAS))
+                {
+                    query = context.Ticket.Include(req => req.User)
+                       .AsEnumerable().Where(s => s.Status == Status.HRApproved || s.Status == Status.HRRejected).Where(s => s.CRF.ToString().Contains(search) || s.User.FirstName.ToString().Contains(search) || s.User.LastName.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)) // show tickets that HR approved
+                        .Select(p => p).ToList();
+                }
+                else if (role.Equals(Role.Finance))
+                {
+                    query = context.Ticket.Include(req => req.User)
+                         .AsEnumerable().Where(s => s.Status == Status.SDASApproved || s.Status == Status.SDASRejected).Where(s => s.CRF.ToString().Contains(search) || s.User.FirstName.ToString().Contains(search) || s.User.LastName.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)) // show tickets that SDAS approved
+                        .Select(p => p).ToList();
+                }
+
+                ViewBag.pendingTickets = query;
+                return View("PendingTickets");
+            }
+        }
+
 
         public ActionResult PendingTickets()
         {
@@ -260,6 +314,20 @@ namespace Reimbursement_Web_System.Controllers
             }
         }
 
+        public ActionResult CompletedTicketsSearch(string search)
+        {
+            using (var context = new ReimbursementContext())
+            {
+                int userId = (int)Session["UserId"]; //get the user id from session
+
+                //select all tickets that are complete
+                var query = context.Ticket.Include(req => req.User)
+                     .AsEnumerable().Where(s => s.DateCompleted != null).Where(s => s.CRF.ToString().Contains(search) || s.User.FirstName.ToString().Contains(search) || s.User.LastName.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)).ToList();
+
+                ViewBag.pendingTickets = query;
+                return View("CompletedTickets");
+            }
+        }
         public ActionResult CompletedTickets()
         {
             using (var context = new ReimbursementContext())
