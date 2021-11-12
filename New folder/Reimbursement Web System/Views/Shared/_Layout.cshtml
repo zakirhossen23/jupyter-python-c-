@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head><!--this is the latest version edited 10/23/2021-->
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="header-img-fluid" style="display: flex; justify-content: center; border-color: orange; border-style: solid;padding:0 ">
+                <img class="img-fluid" src="https://www.feutech.edu.ph/assets/img/logos/headlogocut.png" alt style="max-width: 85%; height: 80px ">
+            </div>
+        </div>
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Reimbursement System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (Session["UserId"] == null)
+                    {
+                    }
+                    @if (Session["UserId"] != null && Convert.ToInt32(Session["Role"]) == 0)
+                    {
+                        <li>@Html.ActionLink("Pending Tickets", "PendingTickets", "User")</li>
+                        <li>@Html.ActionLink("Completed Tickets", "CompletedTickets", "User")</li>
+                        <li>@Html.ActionLink("Create Ticket", "CreateTicket", "User")</li>
+                    }
+                    @if (Session["UserId"] != null && Convert.ToInt32(Session["Role"]) != 0)
+                    {
+                        <li>@Html.ActionLink("Home", "Home", "Admin")</li>
+                        <li>@Html.ActionLink("Pending Tickets", "PendingTickets", "Admin")</li>
+                        <li>@Html.ActionLink("Completed Tickets", "CompletedTickets", "Admin")</li>
+                    }
+                </ul>
+                <div>
+                    <p style="text-align: end; margin-top: 10px; margin-bottom: 0px;">
+                        <button type="button" style="background: transparent;border: none;outline: none;" data-toggle="modal" data-target="#userModal">
+                            <span class="glyphicon glyphicon-user" style="font-size: 32px; color: white;"></span>
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="userModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                @if (Session["UserId"] == null)
+                {
+                    using (Html.BeginForm("Login", "Home"))
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">User Login</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="Username">Username</label>
+                                @Html.TextBox("Username", null, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="Password">Password</label>
+                                @Html.Password("Password", null, new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn" data-dismiss="modal">Close</a>
+                            <button type="submit" class="btn btn-success" id="btnLogin">Login</button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">User Information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="Username">Username:</label>
+                            @Html.Raw(Session["Username"])
+                        </div>
+                        <div class="form-group">
+                            <label for="Username">First Name:</label>
+                            @Html.Raw(Session["FirstName"])
+                        </div>
+                        <div class="form-group">
+                            <label for="Username">Last Name:</label>
+                            @Html.Raw(Session["LastName"])
+                        </div>
+                        <div class="form-group">
+                            <label for="Username">Role:</label>
+                            @Html.Raw(Session["Role"])
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">Close</a>
+                        @Html.ActionLink("Logout", "Logout", "Home", null, new { @class = "btn btn-warning" })
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+<script type="text/javascript">
+    toastr.options = {
+        timeOut: 0,
+        extendedTimeOut: 0,
+    };
+     function loadNotification() {
+            $.ajax({
+                url: '@Url.Action("GetToasterNotification", "Notification")',
+                success: function (data) {
+                    if (data != "") {
+                        data.forEach(function (e) {
+                            toastr.success(e);
+                        });
+                    }
+                }
+            });
+        }
+    $(function () {
+        loadNotification();
+        setInterval(function () {
+            loadNotification();
+        }, 5000);
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var loginError = '@(ViewBag.LoginError)';
+        if (loginError) {
+            toastr.error('Invalid User');
+        }
+    });
+</script>

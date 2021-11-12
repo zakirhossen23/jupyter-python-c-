@@ -1,0 +1,1004 @@
+﻿@model Reimbursement_Web_System.Models.Ticket
+
+@{
+    ViewBag.Title = "View Ticket";
+}
+<div hidden>
+    <iframe name="dummyframe" id="dummyframe"></iframe>
+
+    @using (Html.BeginForm("UpdateTicket", "Admin", FormMethod.Post, new { target = "dummyframe", id = "uploadform", encType = "multipart/form-data" }))
+    {
+        <input accept="image/jpeg, image/jpg, image/png" id="ImagesUpload" multiple="multiple" name="ImagesUpload" runat="server" type="file" value="">
+        <dl class="dl-horizontal">
+            @Html.HiddenFor(model => model.CRF)
+
+            <dt>
+                @Html.LabelFor(model => model.User.LastName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.LastName)
+                @Html.HiddenFor(model => model.User.LastName)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.User.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.FirstName)
+                @Html.HiddenFor(model => model.User.FirstName)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.DateFiled)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateFiled)
+                @Html.HiddenFor(model => model.DateFiled)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.Purpose)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Purpose)
+                @Html.HiddenFor(model => model.Purpose)
+            </dd>
+
+            <dt>
+                @Html.LabelFor(model => model.Office)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Office)
+                @Html.HiddenFor(model => model.Office)
+            </dd>
+
+        </dl>
+
+
+        <button type="submit" name="command" value="SaveImage" class="btn btn-success" id="imageuploadbtn" class="btn" style="border: solid #5cb85c;width: 21%;">Yes</button>}
+</div>
+
+
+<h2>View Ticket</h2>
+
+@using (Html.BeginForm("UpdateTicket", "Admin", FormMethod.Post, new { encType = "multipart/form-data" }))
+{
+    <div>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+        <section class="multi_step_form">
+            <div class="msform">
+                <!-- progressbar -->
+                <ul class="progressbar">
+                    @{ if (Model.DirectorStatus == null)//Approved => Rejected => active
+                        {
+                            <li class="active">Director</li>
+                        }
+                        else
+                        {
+                            <li class="@Model.DirectorStatus">Director</li>
+                        } }
+                    <li class="@Model.HSUStatus">HSU</li>
+                    <li class="@Model.HRStatus">HR</li>
+                    <li class="@Model.SDASStatus">SDAS</li>
+                    <li class="@Model.FinanceStatus">Finance</li>
+                </ul>
+            </div>
+        </section>
+        <hr />
+        <dl class="dl-horizontal">
+            @Html.HiddenFor(model => model.CRF)
+            <dt>
+                @Html.LabelFor(model => model.User.LastName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.LastName)
+                @Html.HiddenFor(model => model.User.LastName)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.User.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.FirstName)
+                @Html.HiddenFor(model => model.User.FirstName)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.DateFiled)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateFiled)
+                @Html.HiddenFor(model => model.DateFiled)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.Purpose)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Purpose)
+                @Html.HiddenFor(model => model.Purpose)
+            </dd>
+
+            <dt>
+                @Html.LabelFor(model => model.Office)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Office)
+                @Html.HiddenFor(model => model.Office)
+            </dd>
+
+            <dt>
+                @Html.LabelFor(model => model.UpdateDateFiled)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UpdateDateFiled)
+                @Html.HiddenFor(model => model.UpdateDateFiled)
+            </dd>
+            <div hidden>
+                @Html.EditorFor(model => model.DirectorStatus)
+                @Html.EditorFor(model => model.HSUStatus)
+                @Html.EditorFor(model => model.HRStatus)
+                @Html.EditorFor(model => model.SDASStatus)
+                @Html.EditorFor(model => model.FinanceStatus)
+            </div>
+        </dl>
+        <div class="form-group">
+            <div style="display: flex; justify-content: space-between">
+                <div>
+                    <h3>Reimbursement</h3>
+                </div>
+            </div>
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Row #</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Nature of Expenditure</th>
+                        <th>Approve</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{decimal amount = 0; }
+                    @{int rowCount = 1; }
+                    @if (Model.Reimbursement != null)
+                    {
+                        for (int i = 0; i < Model.Reimbursement.Count(); i++)
+                        {
+                            <tr>
+                                <td>@rowCount</td>
+                                <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                                <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                                <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                                <td>
+                                    <div hidden>
+
+                                        @Html.EditorFor(model => model.Reimbursement[i].TicketCRF)
+                                        @Html.EditorFor(model => Model.Reimbursement[i].Id);
+                                        @Html.EditorFor(model => Model.Reimbursement[i].Date);
+                                        @Html.EditorFor(model => Model.Reimbursement[i].Amount);
+                                        @Html.EditorFor(model => Model.Reimbursement[i].NatureOfExpenditure);
+                                        @Html.EditorFor(model => Model.Reimbursement[i].Status)
+                                    </div>
+
+
+                                    @{ Reimbursement_Web_System.Models.Role userrole = (Reimbursement_Web_System.Models.Role)Session["Role"]; //get the role from the user
+                                        if (userrole.Equals(Reimbursement_Web_System.Models.Role.HR))
+                                        {//HR ROLE
+                                            if (Model.Reimbursement[i].Status == true)
+                                            {
+                                                <input type="button" id="approve+@i" disabled name="@i" onclick="approve_click(this.name)" class="btn btn-success hrapproved2" value="Approve" />
+                                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn hrrejectbtn2" value="Reject" /> }
+                                            else
+                                            {
+                                                <input type="button" id="approve+@i" name="@i" disabled onclick="approve_click(this.name)" class="btn hrapprovebtn" value="Approve" />
+                                                <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success hrrejected2" value="Reject" /> }
+                                        }
+
+                                        else //others admins
+                                        {
+                                            if (Model.Reimbursement[i].Status == true)
+                                            {
+                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" /> }
+                                            else
+                                            {
+                                                <input type="button" id="approve+@i" name="@i" onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                                <input type="button" id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" /> }
+                                        } }
+
+
+                                </td>
+
+                            </tr>
+                                                rowCount++;
+                                                amount = Model.Reimbursement[i].Amount + amount;
+                                            }
+                                        }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            @{ Reimbursement_Web_System.Models.Role role = (Reimbursement_Web_System.Models.Role)Session["Role"];
+
+                <h4>Total Amount: @amount.ToString("0.00")</h4>
+            }
+            <br />
+            <br />
+        </div>
+        <div>
+            <div style="display:table;">
+                <div style="width: 104%;margin-left: -20px;">
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
+                    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+                    @for (int i = 0; i < Model.Medias.Count(); i++)
+                    {
+                        <div class="image-container" style="margin: 5px; float: left; position: relative">
+                            @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
+                            @Html.HiddenFor(model => Model.Medias[i].ImagePath)
+                            @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
+
+
+                            <b class="images">
+                                <div style="display: flex;">
+                                    <a href="@Model.Medias[i].ImagePath" style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;">
+                                        <div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div>
+                                    </a>
+                                    <div style="display: flex;background: #e7e7e7;">
+                                        <div style="padding: 9px 0px 0px 0px; width: 152px;">
+                                            @{ string filename = ""; if (Path.GetFileName(Model.Medias[i].ImagePath).Length > 20) { filename = Path.GetFileName(Model.Medias[i].ImagePath).Substring(0, 20); } else { filename = Path.GetFileName(Model.Medias[i].ImagePath); };
+
+                                                string uploadDir = "Ticket_Images"; //server folder name
+                                                string filepath = Path.Combine(Server.MapPath("~/" + uploadDir), Path.GetFileName(Model.Medias[i].ImagePath)); FileInfo fi = new FileInfo(filepath);
+                                                long fileSizeInBytes = 0;
+                                                try
+                                                {
+                                                    fileSizeInBytes = (fi.Length / 1024);
+                                                }
+                                                catch (Exception e) { }; }
+                                            <k style="align-content: end;color: black;">@filename</k>
+                                            <br>
+                                            <k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">@fileSizeInBytes kb</k>
+                                        </div>
+                                        <div style="padding: 20px 7px 13px 0px; width: 21px;">
+                                            <a onclick="myFunction(this.id)" id="@i" class="popup" style="cursor: pointer;">
+
+                                                <span class="popuptext" id="myPopup">
+                                                    <span>@filename </span>
+                                                    <br>
+                                                    <span>    @fileSizeInBytes kb</span>
+                                                    <br />
+                                                    <span> @fi.CreationTime</span>
+                                                </span>
+
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </b>
+
+
+
+                        </div>}
+                    @{
+                        if (role.Equals(Reimbursement_Web_System.Models.Role.HR))
+                        {
+
+                            <div id="beforetheadd" style="float: left;width: 70px;height: 59px;margin: 5px;">
+                                <input type="button" value="+" style="width: 100%; height: 100%; display: block; border: none; border-radius: 9px; font-size: 30px; " onclick="uploadfile();" />
+
+                            </div> }
+                        }
+                        <br />
+                        <br />
+                    </div>
+            </div>
+        </div>
+        @if (Convert.ToInt32(Session["Role"]) == 1)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DirectorRemarks, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DirectorInternalComments, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) == 2)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.HSURemarks, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <br />
+                            <br />
+                            @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.HSUInternalComments, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) == 3)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.HRRemarks, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <br />
+                            <br />
+                            @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.HRInternalComments, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) == 4)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SDASRemarks, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SDASInternalComments, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) == 5)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FinanceRemarks, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FinanceInternalComments, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+        @if (Convert.ToInt32(Session["Role"]) == 0)
+        {
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.DirectorRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.DirectorRemarks)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) != 1)
+        {
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.DirectorRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.DirectorInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) != 2)
+        {
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HSURemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HSUInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) != 3)
+        {
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HRRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HRInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) != 4)
+        {
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.SDASRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.SDASInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Convert.ToInt32(Session["Role"]) != 5)
+        {
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.FinanceRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.FinanceInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br />
+    <br />
+    <!-- Save Modal -->
+    <div id="saveModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="height: 100%;padding: 15% 0px 20% 0px;font-size: 30px;text-align: center;">
+                <div id="show_save_message">
+
+                </div>
+                <script>
+                    function saving() {
+                        const remarks1 = document.getElementsByClassName("form-control text-box multi-line")[0]
+                        const remarks2 = document.getElementsByClassName("form-control text-box multi-line")[1]
+                        const role = "@role";
+                        const hrrole = "@Reimbursement_Web_System.Models.Role.HR"
+                        if (role == hrrole) {
+                            if (document.getElementById("ImagesUpload").files.length == 0) {
+                                document.getElementById("show_save_message").innerHTML = "<h2>Balance Sheet needs to be uploaded</h1>"
+                            }
+                            else if (remarks1.value == "" || remarks2.value == "") {
+                                document.getElementById("show_save_message").innerHTML = "<h1>Remarks cannot be empty!</h1>"
+                            } else {
+                                document.getElementById("show_save_message").innerHTML = '<div><p>Are you sure ?</p><button type="submit" name="command" value="Approve" class="btn btn-success" id="btnLogin" class="btn" style="border: solid #5cb85c;width: 21%;">Yes</button><a href="#" class="btn" data-dismiss="modal" style="border: solid red;width: 21%;background: red;color: white;">No</a></div >'
+                            }
+                        } else if(remarks1.value == "" || remarks2.value == "") {
+                                document.getElementById("show_save_message").innerHTML = "<h1>Remarks cannot be empty!</h1>"
+                        } else {
+                                document.getElementById("show_save_message").innerHTML = '<div><p>Are you sure ?</p><button type="submit" name="command" value="Approve" class="btn btn-success" id="btnLogin" class="btn" style="border: solid #5cb85c;width: 21%;">Yes</button><a href="#" class="btn" data-dismiss="modal" style="border: solid red;width: 21%;background: red;color: white;">No</a></div >'
+                        }
+
+                        }
+
+                </script>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @*<button type="submit" class="btn btn-danger" id="btnLogin" name="command" value="Reject">Reject</button>*@
+        <input type="button" data-toggle="modal" data-target="#saveModal" onclick="saving();" class="btn btn-success" id="btnSave" name="command" value="Save" />
+    </div>}
+
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+<script>
+
+
+    function myFunction(id) {
+        var popup = document.getElementsByClassName("popuptext")[id];
+        popup.classList.toggle("show");
+        console.log("clicked");
+    }
+</script>
+<script>
+    function reject_click(id) {
+        document.getElementById("reject+" + id).className = "btn btn-success rejected2"
+        document.getElementById("approve+" + id).className = "btn approvebtn"
+        document.getElementsByName("Reimbursement[" + id + "].Status")[0].value = "false"
+        document.getElementsByName("Reimbursement[" + id + "].Status")[1].value = "false"
+    }
+
+    function approve_click(id) {
+
+        document.getElementById("approve+" + id).className = "btn btn-success approved2"
+        document.getElementById("reject+" + id).className = "btn rejectbtn2"
+        document.getElementsByName("Reimbursement[" + id + "].Status")[0].value = "true"
+        document.getElementsByName("Reimbursement[" + id + "].Status")[1].value = "true"
+    }
+    $('.reimbursement-reject').bind('click', submit_click);
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+    function submit_click(event) {
+        $(event.currentTarget)
+    }
+    var imageupload = document.getElementById("ImagesUpload");
+
+    function uploadfile() {
+        imageupload.click();
+    };
+
+    imageupload.onchange = ({ target }) => {
+
+
+        let allfiles = target.files;
+        for (let i = 0; i < allfiles.length; i++) {
+            var currentdate = new Date();
+            let file = allfiles[i];
+            const reader = new FileReader();
+            reader.onload = function () {
+                const result = reader.result;
+                const addbtndiv = document.getElementById("beforetheadd")
+                const filename = file.name;
+         addbtndiv.insertAdjacentHTML('beforebegin',
+'<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px;"><k style="align-content: end;color: black;">' +  +'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' +
+file.name + '</k></div><div style="padding: 20px 7px 13px 0px; width: 21px;"><a onclick="myFunction(this.id)" id="' +
+$('[class="popup"]').length+ '" class="popup" style="cursor: pointer;"><span class="popuptext" id="myPopup"><span>' +
+file.name + '</span><br><span>' +
+formatBytes(file.size, 0) + '</span><br><span>' +
+currentdate.getDate() + "/"
++ (currentdate.getMonth() + 1) + "/"
++ currentdate.getFullYear() + "  "
++ currentdate.getHours() + ":"
++ currentdate.getMinutes() + ":"
++ currentdate.getSeconds()  + '</span></span><svg width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path></svg></a></div></div></div></b></div>');
+            }
+            reader.readAsDataURL(file);
+
+        }
+        document.getElementById("imageuploadbtn").click();
+    };
+
+    function onDelete(event) {
+        imageupload.files.splice(event.id, 1);
+        event.parentElement.remove();
+    };
+
+    $('.delete-image').click(function (event) {
+        event.currentTarget.parentElement.remove();
+        event.currentTarget.parentElement.firstElementChild.remove();
+    });
+</script>
+
+<!--  Popup  CSS file -->
+<link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/lokesh/lightbox2/dev/dist/css/lightbox.min.css">
+
+
+<!--  Popup  JS file -->
+<script src="https://raw.githubusercontent.com/lokesh/lightbox2/dev/dist/js/lightbox-plus-jquery.min.js"></script>
+
+<style>
+    textarea {
+        max-width: none;
+        height: 150px !important;
+    }
+
+    button {
+        margin-right: 10px;
+    }
+
+
+
+    .btn.btn-success.approved2 {
+        pointer-events: none;
+        background: #399d19;
+    }
+
+    .btn.btn-success.rejected2 {
+        pointer-events: none;
+        background: red;
+        border: solid 2px red;
+        color: white;
+    }
+
+    .btn.rejectbtn2 {
+        background: white;
+        border: solid 2px red;
+        color: red;
+        pointer-events: All;
+    }
+
+        .btn.rejectbtn2:hover {
+            background: red !important;
+            color: white !important;
+        }
+
+    .btn.approvebtn {
+        background: white;
+        border: solid 2px #399d19;
+        color: #399d19;
+        pointer-events: all;
+    }
+
+        .btn.approvebtn:hover {
+            background: #399d19 !important;
+            color: white !important;
+        }
+
+    /***********HR Role********/
+    .btn.btn-success.hrapproved2 {
+        pointer-events: none;
+        background: #399d19;
+    }
+
+    .btn.btn-success.hrrejected2 {
+        pointer-events: none;
+        background: red;
+        border: solid 2px red;
+        color: white;
+    }
+
+    .btn.hrrejectbtn2 {
+        background: white;
+        border: solid 2px red;
+        color: red;
+        pointer-events: All;
+    }
+
+    .btn.hrapprovebtn {
+        background: white;
+        border: solid 2px #399d19;
+        color: #399d19;
+        pointer-events: all;
+    }
+
+
+    .pill {
+        border: none;
+        color: white;
+        padding: 10px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        border-radius: 16px;
+    }
+
+    .td-pending {
+        background-color: #6c757d;
+    }
+
+    .td-DirectorApproved, .td-HSUApproved, .td-HRApproved, .td-SDASApproved, .td-FinanceApproved {
+        background-color: #28a745;
+    }
+
+    .td-DirectorRejected, .td-HSURejected, .td-HRRejected, .td-SDASRejected, .td-FinanceRejected {
+        background-color: #dc3545;
+    }
+
+    /* Popup container - can be anything you want */
+    .popup {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* The actual popup */
+        .popup .popuptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 117%;
+            left: -73px;
+        }
+
+            /* Popup arrow */
+            .popup .popuptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        /* Toggle this class - hide and show the popup */
+        .popup .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s;
+        }
+
+        .popup .hide {
+            visibility: hidden;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s;
+        }
+
+
+
+
+    /* for progrssbar*/
+    /*progressbar*/
+
+    .msform {
+        text-align: center;
+        position: relative;
+        margin: 0 auto;
+        background: #ffffff;
+        z-index: 1;
+    }
+
+    .progressbar {
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+
+        .progressbar li {
+            list-style-type: none;
+            color: Black;
+            font-size: 15px;
+            width: calc(100%/5);
+            float: left;
+            position: relative;
+            text-align: center;
+        }
+
+
+            .progressbar li::before {
+                content: "";
+                font: normal normal normal 40px Ionicons;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                display: block;
+                background: #eaf0f4;
+                border-radius: 50%;
+                margin: 0 auto 10px auto;
+                border: 1px solid;
+                font-size: 30px;
+                text-align: center;
+            }
+
+            .progressbar li::after {
+                content: '';
+                width: 100%;
+                height: 10px;
+                background: #eaf0f4;
+                position: absolute;
+                left: -50%;
+                top: 21px;
+                font-size: 30px;
+                z-index: -1;
+                text-align: center;
+            }
+
+            .progressbar li.Approved {
+                color: green;
+                font-size: 14px;
+                content: "\f383";
+                text-align: center;
+            }
+
+                .progressbar li.Approved::after {
+                    background: blue;
+                    color: white;
+                    font-size: 30px;
+                    text-align: center;
+                }
+
+                .progressbar li.Approved::before {
+                    background: #5cb85c;
+                    color: white;
+                    border: solid 1px blue;
+                    font-size: 30px;
+                    content: "\f383";
+                    text-align: center;
+                }
+
+
+            .progressbar li.Rejected {
+                color: Red;
+                font-size: 14px;
+                text-align: center;
+            }
+
+                .progressbar li.Rejected::after {
+                    background: blue;
+                    color: white;
+                    font-size: 30px;
+                    text-align: center;
+                }
+
+                .progressbar li.Rejected::before {
+                    background: Red;
+                    color: white;
+                    border: solid 1px blue;
+                    font-size: 30px;
+                    content: "\f2d7";
+                    text-align: center;
+                }
+
+
+            .progressbar li.active {
+                color: blue;
+                font-size: 25px;
+                font-weight: 15px;
+                text-align: center;
+            }
+
+                .progressbar li.active::after {
+                    background: blue;
+                    color: white;
+                    font-size: 30px;
+                    text-align: center;
+                }
+
+    textarea {
+        max-width: none;
+        height: 150px !important;
+    }
+
+    button {
+        margin-right: 10px;
+    }
+</style>

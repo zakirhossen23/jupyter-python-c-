@@ -1,0 +1,176 @@
+﻿@model Reimbursement_Web_System.Models.Ticket
+@using Reimbursement_Web_System.Models
+
+@{
+    ViewBag.Title = ViewBag.PageTitle;
+}
+
+<h2>@ViewBag.PageTitle</h2>
+
+@using (Html.BeginForm("SaveTicket", "User"))
+{
+    @Html.HiddenFor(model => model.CRF)
+    <div class="form-horizontal">
+        <hr />
+        <dl class="dl-horizontal">
+            @Html.HiddenFor(model => model.CRF)
+            <dt>
+                @Html.LabelFor(model => model.DateFiled)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DateFiled)
+                @Html.HiddenFor(model => model.DateFiled)
+            </dd>
+            <dt>
+                @Html.LabelFor(model => model.Purpose)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Purpose)
+                @Html.HiddenFor(model => model.Purpose)
+            </dd>
+
+            <dt>
+                @Html.LabelFor(model => model.Office)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Office)
+                @Html.HiddenFor(model => model.Office)
+            </dd>
+        </dl>
+        <div class="form-group">
+            <div style="display: flex; justify-content: space-between">
+                <div>
+                    <h3>Reimbursement</h3>
+                </div>
+            </div>
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Row #</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Nature of Expenditure</th>
+                        <th>Approve</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{decimal amount = 0; }
+                    @{int rowCount = 1; }
+                    @if (Model.Reimbursement != null)
+                    {
+                        for (int i = 0; i < Model.Reimbursement.Count(); i++)
+                        {
+                            @Html.HiddenFor(model => Model.Reimbursement[i].Id)
+                            @Html.HiddenFor(model => Model.Reimbursement[i].Date)
+                            @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
+                            @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
+                            <tr>
+                                <td>@rowCount</td>
+                                <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                                <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                                <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                                <td>
+                                    @Html.DisplayFor(model => Model.Reimbursement[i].Status)
+                                </td>
+                            </tr>
+                            rowCount++;
+                            amount = @Model.Reimbursement[i].Amount + amount;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            @{
+                <h4>Total Amount: @amount.ToString("0.00")</h4>
+            }
+            <br />
+            <br />
+        </div>
+        <div>
+            @foreach (var item in Model.Medias)
+            {
+                <img src="@item.ImagePath" style="height:200px;width:200px;" />
+            }
+            <br />
+            <br />
+        </div>
+        <div>
+            <hr />
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

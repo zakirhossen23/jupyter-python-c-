@@ -239,11 +239,7 @@ amount = Model.Reimbursement[i].Amount + amount;
         @{ Reimbursement_Web_System.Models.Role role = (Reimbursement_Web_System.Models.Role)Session["Role"]; //get the role from the user
             if (role.Equals(Reimbursement_Web_System.Models.Role.HR))
             {
-<div hidden>
 
-
-
-</div>
                     <div id="beforetheadd" style="float: left; width: 200px; height: 200px; ">
                         <input type="button" value="+" style="width:100%; height:100%; display:block; border:none; border-radius:30px; font-size:30px;" onclick="uploadfile();" />
 
