@@ -41,7 +41,7 @@ namespace Reimbursement_Web_System.Models
         [Required]
         [Display(Name = "Date Filed")]
         [DataType(DataType.Date, ErrorMessage = "Date only")]
-        [DisplayFormat(DataFormatString = "{yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateFiled { get; set; }
 
 

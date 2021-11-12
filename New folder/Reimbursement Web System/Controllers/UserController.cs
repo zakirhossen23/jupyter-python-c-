@@ -12,6 +12,22 @@ namespace Reimbursement_Web_System.Controllers
     [SessionAuthorize]
     public class UserController : Controller
     {
+        public ActionResult PendingTicketsSearch(string search)
+        {
+
+            using (var context = new ReimbursementContext())
+            {
+                int userId = (int)Session["UserId"]; // get the userid from session
+                var query = context.Ticket.Where(s => s.User.Id == userId && s.DateCompleted == null)
+                    .AsEnumerable().Where(s => s.CRF.ToString().Contains(search)  || s.DateFiled.ToString("MM/dd/yyyy").Contains(search))
+                    .ToList(); //select all the tickets for the user except completed ticket
+
+                ViewBag.pendingTickets = query;
+                return View("PendingTickets");
+            }
+        }
+
+
         public ActionResult PendingTickets()
         {
             using (var context = new ReimbursementContext())
@@ -21,6 +37,18 @@ namespace Reimbursement_Web_System.Controllers
 
                 ViewBag.pendingTickets = query; //store the data in view bag for frontend consumption
                 return View();
+            }
+        }
+
+        public ActionResult CompletedTicketsSearch(string search)
+        {
+            using (var context = new ReimbursementContext())
+            {
+                int userId = (int)Session["UserId"]; // get the userid from session
+                var query = context.Ticket.Where(s => s.User.Id == userId && s.DateCompleted != null).AsEnumerable().Where(s => s.CRF.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)).ToList(); //select all the tickets for the user that have date completed value
+
+                ViewBag.pendingTickets = query; //store the data in view bag for frontend consumption
+                return View("CompletedTickets");
             }
         }
         public ActionResult CompletedTickets()
