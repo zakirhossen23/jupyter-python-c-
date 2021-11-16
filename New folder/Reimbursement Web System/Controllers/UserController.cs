@@ -186,26 +186,7 @@ namespace Reimbursement_Web_System.Controllers
                         context.SaveChanges();
 
                         //same code in create. please refer in line #108
-                        if (ticket.ImagesUpload.Count() != 0)
-                        {
-                            string uploadDir = "Ticket_Images";
-                            string fileName;
-                            foreach (var rec in ticket.ImagesUpload)
-                            {
-                                if (rec != null)
-                                {
-                                    fileName = Path.GetFileName(rec.FileName);
-                                    fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
-                                    rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
-                                    dbTicket.Medias.Add(new Media
-                                    {
-                                        ImagePath = "/" + uploadDir + "/" + fileName
-                                    }); ;
-                                }
-                            }
-                        }
-
-                        //add the medias in the media model
+                      //add the medias in the media model
                         context.Media.AddRange(ticket.Medias);
 
                         //save the database
@@ -265,6 +246,68 @@ namespace Reimbursement_Web_System.Controllers
             }
         }
 
+        public ActionResult UpdateTicket(Ticket ticket, string command)
+        {
+            //remove username and password validation because it's not part of the ticket
+            ModelState.Remove("User.Username");
+            ModelState.Remove("User.Password");
+
+            Role role = (Role)Session["Role"]; //get the role from the user
+            if (command == "SaveImage")
+            {
+                using (var context = new ReimbursementContext()) //initialize database
+                {
+
+
+                    var dbTicket = context.Ticket
+                    .Where(x => x.CRF == ticket.CRF)
+                    .SingleOrDefault();
+
+                    var oldMedia = context.Media
+                            .Where(s => s.TicketCRF == ticket.CRF)
+                            .Select(p => p).ToList();
+
+
+                    if (ticket.Medias != null && ticket.Medias.Count > 0)
+                    {
+                        //readd all media except id == 0 which is deleted
+                        dbTicket.Medias.AddRange(ticket.Medias.Where(x => x.Id != 0));
+                    }
+                    //same code in create. please refer in line #108
+                    if (ticket.ImagesUpload.Count() != 0)
+                    {
+                        string uploadDir = "Ticket_Images";
+                        string fileName;
+                        foreach (var rec in ticket.ImagesUpload)
+                        {
+                            if (rec != null)
+                            {
+                                fileName = Path.GetFileName(rec.FileName);
+                                fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
+                                rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
+                                dbTicket.Medias.Add(new Media
+                                {
+                                    ImagePath = "/" + uploadDir + "/" + fileName
+                                }); ;
+                            }
+                        }
+
+
+                        //update the existing ticket to the new ticket
+                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
+
+                        //save in database
+                        context.SaveChanges();
+                    }
+
+                }
+                return View("Pending");
+            }
+             else
+            {
+                return View("ViewTicket"); //return view for validation
+            }
+        }
         public ActionResult DeleteTicket(int crf)
         {
             using (var context = new ReimbursementContext())
