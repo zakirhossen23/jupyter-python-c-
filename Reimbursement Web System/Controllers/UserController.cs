@@ -7,12 +7,27 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.IO;
 
-
 namespace Reimbursement_Web_System.Controllers
 {
     [SessionAuthorize]
     public class UserController : Controller
     {
+        public ActionResult PendingTicketsSearch(string search)
+        {
+
+            using (var context = new ReimbursementContext())
+            {
+                int userId = (int)Session["UserId"]; // get the userid from session
+                var query = context.Ticket.Where(s => s.User.Id == userId && s.DateCompleted == null)
+                    .AsEnumerable().Where(s => s.CRF.ToString().Contains(search)  || s.DateFiled.ToString("MM/dd/yyyy").Contains(search))
+                    .ToList(); //select all the tickets for the user except completed ticket
+
+                ViewBag.pendingTickets = query;
+                return View("PendingTickets");
+            }
+        }
+
+
         public ActionResult PendingTickets()
         {
             using (var context = new ReimbursementContext())
@@ -22,6 +37,18 @@ namespace Reimbursement_Web_System.Controllers
 
                 ViewBag.pendingTickets = query; //store the data in view bag for frontend consumption
                 return View();
+            }
+        }
+
+        public ActionResult CompletedTicketsSearch(string search)
+        {
+            using (var context = new ReimbursementContext())
+            {
+                int userId = (int)Session["UserId"]; // get the userid from session
+                var query = context.Ticket.Where(s => s.User.Id == userId && s.DateCompleted != null).AsEnumerable().Where(s => s.CRF.ToString().Contains(search) || s.DateFiled.ToString("MM/dd/yyyy").Contains(search)).ToList(); //select all the tickets for the user that have date completed value
+
+                ViewBag.pendingTickets = query; //store the data in view bag for frontend consumption
+                return View("CompletedTickets");
             }
         }
         public ActionResult CompletedTickets()
@@ -35,16 +62,7 @@ namespace Reimbursement_Web_System.Controllers
                 return View();
             }
         }
-        public static string getstatus( string identifiyvalue ,string nameofvalue)
-        {
-            string approvevalue = "Approved";
-            string rejectedvalue = "Rejected";
-            if (nameofvalue.Contains("Approved"))
-            {
-                return approvevalue;
-            }
-            return rejectedvalue;
-        }
+
         public ActionResult CreateTicket(Ticket ticket)
         {
             ViewBag.PageTitle = "Create Ticket"; //page title
@@ -53,7 +71,6 @@ namespace Reimbursement_Web_System.Controllers
 
             ticket = new Ticket(); //create new ticket
             ticket.DateFiled = DateTime.Now; //set the ticket date filed to date today
-            ticket.UpdateDateFiled = DateTime.Now;
             ModelState.Clear(); //clear validation
             return View(ticket);
         }
@@ -103,7 +120,7 @@ namespace Reimbursement_Web_System.Controllers
             }
 
             ticket.DateFiled = DateTime.Now; //set datefiled to date today
-
+            ticket.UpdateDateFiled = DateTime.Now;
             if (ModelState.IsValid)
             {
                 using (var context = new ReimbursementContext()) //initialize dabtase connection
@@ -130,9 +147,8 @@ namespace Reimbursement_Web_System.Controllers
                                     //collect the file path to be save in database
                                     medias.Add(new Media
                                     {
-                                        ImagePath = "/" + uploadDir + "/" + fileName,
-                                        //UploadDate = DateTime.Now.ToString()
-                                    }) ;
+                                        ImagePath = "/" + uploadDir + "/" + fileName
+                                    }); ;
                                 }
                             }
                         }
@@ -168,37 +184,19 @@ namespace Reimbursement_Web_System.Controllers
                           .Select(p => p).ToList();
                         context.Media.RemoveRange(medias);
                         context.SaveChanges();
-                        
+
                         //same code in create. please refer in line #108
-                        if (ticket.ImagesUpload.Count() != 0)
-                        {
-                            string uploadDir = "Ticket_Images";
-                            string fileName;
-                            foreach (var rec in ticket.ImagesUpload)
-                            {
-                                if (rec != null)
-                                {
-                                    fileName = Path.GetFileName(rec.FileName);
-                                    fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
-                                    rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
-                                    dbTicket.Medias.Add(new Media
-                                    {
-                                        ImagePath = "/" + uploadDir + "/" + fileName
-                                    }); 
-                                }
-                            }
-                        }
-                        //add the medias in the media model
+                      //add the medias in the media model
                         context.Media.AddRange(ticket.Medias);
 
                         //save the database
                         context.SaveChanges();
-                       //update the time
+                        //update the time
                         dbTicket.UpdateDateFiled = DateTime.Now;
                         ticket.UpdateDateFiled = DateTime.Now;
                         //update the existing ticket to the new ticket
                         context.Entry(dbTicket).CurrentValues.SetValues(ticket);
-                       
+
                         //save in database
                         context.SaveChanges();
 
@@ -248,6 +246,68 @@ namespace Reimbursement_Web_System.Controllers
             }
         }
 
+        public ActionResult UpdateTicket(Ticket ticket, string command)
+        {
+            //remove username and password validation because it's not part of the ticket
+            ModelState.Remove("User.Username");
+            ModelState.Remove("User.Password");
+
+            Role role = (Role)Session["Role"]; //get the role from the user
+            if (command == "SaveImage")
+            {
+                using (var context = new ReimbursementContext()) //initialize database
+                {
+
+
+                    var dbTicket = context.Ticket
+                    .Where(x => x.CRF == ticket.CRF)
+                    .SingleOrDefault();
+
+                    var oldMedia = context.Media
+                            .Where(s => s.TicketCRF == ticket.CRF)
+                            .Select(p => p).ToList();
+
+
+                    if (ticket.Medias != null && ticket.Medias.Count > 0)
+                    {
+                        //readd all media except id == 0 which is deleted
+                        dbTicket.Medias.AddRange(ticket.Medias.Where(x => x.Id != 0));
+                    }
+                    //same code in create. please refer in line #108
+                    if (ticket.ImagesUpload.Count() != 0)
+                    {
+                        string uploadDir = "Ticket_Images";
+                        string fileName;
+                        foreach (var rec in ticket.ImagesUpload)
+                        {
+                            if (rec != null)
+                            {
+                                fileName = Path.GetFileName(rec.FileName);
+                                fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
+                                rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
+                                dbTicket.Medias.Add(new Media
+                                {
+                                    ImagePath = "/" + uploadDir + "/" + fileName
+                                }); ;
+                            }
+                        }
+
+
+                        //update the existing ticket to the new ticket
+                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
+
+                        //save in database
+                        context.SaveChanges();
+                    }
+
+                }
+                return View("Pending");
+            }
+             else
+            {
+                return View("ViewTicket"); //return view for validation
+            }
+        }
         public ActionResult DeleteTicket(int crf)
         {
             using (var context = new ReimbursementContext())

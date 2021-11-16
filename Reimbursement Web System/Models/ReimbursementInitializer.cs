@@ -20,6 +20,7 @@ namespace Reimbursement_Web_System.Models
 
             defaultUsers.Add(new User() { Username = "StandardUserOne", Password = UtilityClass.GetHash("StandardUserOne"), FirstName = "Melissa", LastName = "Rivas", Role = Role.Standard });
             defaultUsers.Add(new User() { Username = "StandardUserTwo", Password = UtilityClass.GetHash("StandardUserTwo"), FirstName = "Cassia", LastName = "Hawes", Role = Role.Standard });
+            defaultUsers.Add(new User() { Username = "Ruth", Password = UtilityClass.GetHash("Ruth"), FirstName = "Cassia", LastName = "Hawes", Role = Role.Standard });
             defaultUsers.Add(new User() { Username = "Director", Password = UtilityClass.GetHash("Director"), FirstName = "Alanna", LastName = "Frost", Role = Role.Director });
             defaultUsers.Add(new User() { Username = "HSU", Password = UtilityClass.GetHash("HSU"), FirstName = "Zelda", LastName = "Glisson", Role = Role.HSU });
             defaultUsers.Add(new User() { Username = "HR", Password = UtilityClass.GetHash("HR"), FirstName = "Carly", LastName = "Schultz", Role = Role.HR });
@@ -32,32 +33,32 @@ namespace Reimbursement_Web_System.Models
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, null, null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, null));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.DirectorApproved, null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.DirectorApproved));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HRApproved, null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HRApproved));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HSUApproved, null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.HSUApproved));
             }
 
             for (int i = 0; i < 2; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.SDASApproved, null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, null, Status.SDASApproved));
             }
 
             for (int i = 0; i < 15; i++)
             {
-                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, DateTime.Now, Status.FinanceApproved,null));
+                defaulTicket.Add(generateTicket(defaultUsers[0], DateTime.Now, DateTime.Now, Status.FinanceApproved));
             }
 
             context.Ticket.AddRange(defaulTicket);
@@ -70,8 +71,7 @@ namespace Reimbursement_Web_System.Models
             base.Seed(context);
         }
 
-        private Ticket generateTicket(User user, DateTime dateFiled, DateTime? dateCompleted, Status? status, DateTime? UpdateDateFiled)
-        {
+        private Ticket generateTicket(User user, DateTime dateFiled, DateTime? dateCompleted, Status? status) {
             Ticket ticket = new Ticket
             {
                 User = user,
@@ -79,8 +79,7 @@ namespace Reimbursement_Web_System.Models
                 Purpose = "Office Supplies Reimbursement",
                 Office = "Makati City",
                 Status = status,
-                DateCompleted = dateCompleted,
-                UpdateDateFiled = UpdateDateFiled
+                DateCompleted = dateCompleted
             };
 
             return ticket;
@@ -101,7 +100,7 @@ namespace Reimbursement_Web_System.Models
             {
                 Ticket = ticket,
                 Date = ticket.DateFiled,
-                NatureOfExpenditure = "Office Supply X",
+                NatureOfExpenditure = "Office Supply test",
                 Amount = GetRandom(), //get random amount
                 Status = status
             };

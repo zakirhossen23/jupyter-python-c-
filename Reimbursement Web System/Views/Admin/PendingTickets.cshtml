@@ -4,8 +4,17 @@
 @{
     ViewBag.Title = "Pending Tickets";
 }
+<div style="display:flex;">
+    <h2 style="width: 378px;">Pending Tickets</h2>
+    <form action="PendingTicketsSearch" method="post"style="width: 100%;">
+        <div style="width: 100%;padding-top: 26px;">
+            <input  id="searchbtn" style="right: 0;float: right;" type="submit" value="Search">
+            <input name="search" id="search" style="right: 0;float: right;">
+        </div>
+    </form>
+  
 
-<h2>Pending Tickets</h2>
+</div>
 
 <table class="table table-striped table-condensed">
     <thead>

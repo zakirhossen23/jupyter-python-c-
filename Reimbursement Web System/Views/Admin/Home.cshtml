@@ -1,22 +1,7 @@
 ﻿
-@*@{
-
-
-    String graphfile1;
-    String graphfile2;
-    WebClient client = new WebClient();
-downloadgraph1:
-    string graph1 = client.DownloadString("https://jupyterimage.herokuapp.com/getone");
-    if (graph1 == "") { System.Threading.Thread.Sleep(500); goto downloadgraph1; }
-Downloadgraph2:
-    string graph2 = client.DownloadString("https://jupyterimage.herokuapp.com/getsecond");
-    if (graph2 =="") { System.Threading.Thread.Sleep(500); goto Downloadgraph2; }
-    graphfile1 = "data:image/png;base64," + graph1.ToString();
-    graphfile2 = "data:image/png;base64," + graph2.ToString();
-  
-}*@
-
+@{
+    ViewBag.Title = "Home";
+}
 
 <h2>Home</h2>
-@*<img style="width: 89%;" src="@graphfile1" />
-<img style="width: 89%;" src="@graphfile2" />*@
+

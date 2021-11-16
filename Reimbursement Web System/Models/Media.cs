@@ -14,6 +14,5 @@ namespace Reimbursement_Web_System.Models
         public string ImagePath { get; set; }
         public int TicketCRF { get; set; }
         public Ticket Ticket { get; set; }
-      //public string UploadDate { get; set; }
     }
 }
