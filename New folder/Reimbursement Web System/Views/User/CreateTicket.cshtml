@@ -13,46 +13,7 @@
         <input accept="image/jpeg, image/jpg, image/png" id="ImagesUpload" multiple="multiple" name="ImagesUpload" runat="server" type="file" value="">
         <dl class="dl-horizontal">
             @Html.HiddenFor(model => model.CRF)
-
-            <dt>
-                @Html.LabelFor(model => model.User.LastName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.User.LastName)
-                @Html.HiddenFor(model => model.User.LastName)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.User.FirstName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.User.FirstName)
-                @Html.HiddenFor(model => model.User.FirstName)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.DateFiled)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.DateFiled)
-                @Html.HiddenFor(model => model.DateFiled)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.Purpose)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Purpose)
-                @Html.HiddenFor(model => model.Purpose)
-            </dd>
-
-            <dt>
-                @Html.LabelFor(model => model.Office)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Office)
-                @Html.HiddenFor(model => model.Office)
-            </dd>
-
+ 
         </dl>
 
 
@@ -179,7 +140,7 @@
             <div style="width: 104%;margin-left: -20px;">
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
                 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-                @if (ViewBag.PageTitle == "View Ticket" && Model.Medias != null)
+                @if (Model.Medias != null)
                 {
                     for (int i = 0; i < Model.Medias.Count(); i++)
                     {
@@ -239,20 +200,26 @@
 
 
                         </div>}
-                    <div id="beforetheadd" style="float: left;width: 70px;height: 59px;margin: 5px;">
-                        <input type="button" value="+" style="width: 100%; height: 100%; display: block; border: none; border-radius: 9px; font-size: 30px; " onclick="uploadfile();" />
 
-                    </div>
-                }
+                } 
+                <div id="beforetheadd" style="float: left;width: 70px;height: 59px;margin: 5px;">
+                    <input type="button" value="+" style="width: 100%; height: 100%; display: block; border: none; border-radius: 9px; font-size: 30px; " onclick="uploadfile();" />
+
+                </div>
             </div>
 
 
         </div>
         <div style="margin-left: -15px">
-            <br />
-            <br />
-            <br />
-            <br />
+            @if (ViewBag.PageTitle == "Create Ticket")
+            {
+                <br />
+                <br />
+                <input accept="image/jpeg, image/jpg, image/png" id="ImagesUpload" multiple="multiple" name="ImagesUpload" runat="server" type="file" value="">
+                <br />
+                <br />
+            }
+
         </div>
         <div class="form-group">
             @if (ViewBag.PageTitle == "Create Ticket")
@@ -356,6 +323,7 @@
     }
 </script>
 <script type="text/javascript">
+    var uploadedint = 0;
         $(function () {
             $('.reimbursement-modal').click(function () {
                 var purpose = $('.Purpose').val();
@@ -406,8 +374,13 @@
                 const result = reader.result;
                 const addbtndiv = document.getElementById("beforetheadd")
                 const filename = file.name;
+
+                var inputfilename = '<input name="ImagesUpload[' + uploadedint + '].fileName" value="' + filename + '" />';
+
+
+
                 addbtndiv.insertAdjacentHTML('beforebegin',
-                    '<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px;"><k style="align-content: end;color: black;">' + +'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' +
+                    inputfilename + '<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px;"><k style="align-content: end;color: black;">' + +'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' +
                     file.name + '</k></div><div style="padding: 20px 7px 13px 0px; width: 21px;"><a onclick="myFunction(this.id)" id="' +
                     $('[class="popup"]').length + '" class="popup" style="cursor: pointer;"><span class="popuptext" id="myPopup"><span>' +
                     file.name + '</span><br><span>' +
@@ -422,8 +395,11 @@
             reader.readAsDataURL(file);
 
         }
-        document.getElementById("imageuploadbtn").click();
-    };
+        var pagetitle = "@ViewBag.PageTitle";
+        if (pagetitle != "Create Ticket") {
+            document.getElementById("imageuploadbtn").click();
+        } else { uploadedint++ };
+    }
 
 </script>
 

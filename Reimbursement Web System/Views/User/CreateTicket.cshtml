@@ -14,45 +14,6 @@
         <dl class="dl-horizontal">
             @Html.HiddenFor(model => model.CRF)
 
-            <dt>
-                @Html.LabelFor(model => model.User.LastName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.User.LastName)
-                @Html.HiddenFor(model => model.User.LastName)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.User.FirstName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.User.FirstName)
-                @Html.HiddenFor(model => model.User.FirstName)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.DateFiled)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.DateFiled)
-                @Html.HiddenFor(model => model.DateFiled)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.Purpose)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Purpose)
-                @Html.HiddenFor(model => model.Purpose)
-            </dd>
-
-            <dt>
-                @Html.LabelFor(model => model.Office)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Office)
-                @Html.HiddenFor(model => model.Office)
-            </dd>
-
         </dl>
 
 
@@ -249,10 +210,15 @@
 
         </div>
         <div style="margin-left: -15px">
-            <br />
-            <br />
-            <br />
-            <br />
+            @if (ViewBag.PageTitle == "Create Ticket")
+            {
+                <br />
+                <br />
+                <input accept="image/jpeg, image/jpg, image/png" id="ImagesUpload" multiple="multiple" name="ImagesUpload" runat="server" type="file" value="">
+                <br />
+                <br />
+            }
+
         </div>
         <div class="form-group">
             @if (ViewBag.PageTitle == "Create Ticket")

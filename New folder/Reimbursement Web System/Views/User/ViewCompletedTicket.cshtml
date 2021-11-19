@@ -10,90 +10,152 @@
 @using (Html.BeginForm("SaveTicket", "User"))
 {
     @Html.HiddenFor(model => model.CRF)
-    <div class="form-horizontal">
-        <hr />
-        <dl class="dl-horizontal">
-            @Html.HiddenFor(model => model.CRF)
-            <dt>
-                @Html.LabelFor(model => model.DateFiled)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.DateFiled)
-                @Html.HiddenFor(model => model.DateFiled)
-            </dd>
-            <dt>
-                @Html.LabelFor(model => model.Purpose)
-            </dt>
+<div class="form-horizontal">
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.HiddenFor(model => model.CRF)
+        <dt>
+            @Html.LabelFor(model => model.DateFiled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateFiled)
+            @Html.HiddenFor(model => model.DateFiled)
+        </dd>
+        <dt>
+            @Html.LabelFor(model => model.Purpose)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Purpose)
-                @Html.HiddenFor(model => model.Purpose)
-            </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Purpose)
+            @Html.HiddenFor(model => model.Purpose)
+        </dd>
 
-            <dt>
-                @Html.LabelFor(model => model.Office)
-            </dt>
+        <dt>
+            @Html.LabelFor(model => model.Office)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Office)
-                @Html.HiddenFor(model => model.Office)
-            </dd>
-        </dl>
-        <div class="form-group">
-            <div style="display: flex; justify-content: space-between">
-                <div>
-                    <h3>Reimbursement</h3>
-                </div>
+        <dd>
+            @Html.DisplayFor(model => model.Office)
+            @Html.HiddenFor(model => model.Office)
+        </dd>
+    </dl>
+    <div class="form-group">
+        <div style="display: flex; justify-content: space-between">
+            <div>
+                <h3>Reimbursement</h3>
             </div>
-            <table class="table table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th>Row #</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Nature of Expenditure</th>
-                        <th>Approve</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{decimal amount = 0; }
-                    @{int rowCount = 1; }
-                    @if (Model.Reimbursement != null)
+        </div>
+        <table class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>Row #</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Nature of Expenditure</th>
+                    <th>Approve</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{decimal amount = 0; }
+                @{int rowCount = 1; }
+                @if (Model.Reimbursement != null)
+                {
+                    for (int i = 0; i < Model.Reimbursement.Count(); i++)
                     {
-                        for (int i = 0; i < Model.Reimbursement.Count(); i++)
-                        {
-                            @Html.HiddenFor(model => Model.Reimbursement[i].Id)
-                            @Html.HiddenFor(model => Model.Reimbursement[i].Date)
-                            @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
-                            @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
-                            <tr>
-                                <td>@rowCount</td>
-                                <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
-                                <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
-                                <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
-                                <td>
-                                    @Html.DisplayFor(model => Model.Reimbursement[i].Status)
-                                </td>
-                            </tr>
-                            rowCount++;
-                            amount = @Model.Reimbursement[i].Amount + amount;
-                        }
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Id)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Date)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].Amount)
+                        @Html.HiddenFor(model => Model.Reimbursement[i].NatureOfExpenditure)
+                        <tr>
+                            <td>@rowCount</td>
+                            <td>@Model.Reimbursement[i].Date.ToString("MM/dd/yyyy")</td>
+                            <td>@Model.Reimbursement[i].Amount.ToString("0.00")</td>
+                            <td>@Model.Reimbursement[i].NatureOfExpenditure</td>
+                            <td>
+                                @{ if (Model.Reimbursement[i].Status == true)
+                                    {
+                                        <input type="button" id="approve+@i" disabled name="@i" onclick="approve_click(this.name)" class="btn btn-success approved2" value="Approve" />
+                                        <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn rejectbtn2" value="Reject" /> }
+                                    else
+                                    {
+                                        <input type="button" id="approve+@i" name="@i" disabled onclick="approve_click(this.name)" class="btn approvebtn" value="Approve" />
+                                        <input type="button" disabled id="reject+@i" name="@i" onclick="reject_click(this.name)" class="btn btn-success rejected2" value="Reject" /> } }
+                            </td>
+                        </tr>
+                        rowCount++;
+                        amount = @Model.Reimbursement[i].Amount + amount;
                     }
-                </tbody>
-            </table>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        @{
+            <h4>Total Amount: @amount.ToString("0.00")</h4>
+        }
+        <br />
+        <br />
+    </div>
+    <div style="display:table;">
+        <div style="width: 104%;margin-left: -20px;">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            @{ for (int i = 0; i < Model.Medias.Count(); i++)
+                {
+
+<div class="image-container" style="margin: 5px; float: left; position: relative">
+    @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
+    @Html.HiddenFor(model => Model.Medias[i].ImagePath)
+    @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
+
+    <b class="images">
+        <div style="display: flex;">
+            <a href="@Model.Medias[i].ImagePath" style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;">
+                <div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div>
+            </a>
+            <div style="display: flex;background: #e7e7e7;">
+                <div style="padding: 9px 0px 0px 0px; width: 152px;">
+                    @{ string filename = ""; if (Path.GetFileName(Model.Medias[i].ImagePath).Length > 20) { filename = Path.GetFileName(Model.Medias[i].ImagePath).Substring(0, 20); } else { filename = Path.GetFileName(Model.Medias[i].ImagePath); };
+
+                        string uploadDir = "Ticket_Images"; //server folder name
+                        string filepath = Path.Combine(Server.MapPath("~/" + uploadDir), Path.GetFileName(Model.Medias[i].ImagePath)); FileInfo fi = new FileInfo(filepath);
+                        long fileSizeInBytes = 0;
+                        try
+                        {
+                            fileSizeInBytes = (fi.Length / 1024);
+                        }
+                        catch (Exception e) { }; }
+                    <k style="align-content: end;color: black;">@filename</k>
+                    <br>
+                    <k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">@fileSizeInBytes kb</k>
+                </div>
+                <div style="padding: 20px 7px 13px 0px; width: 21px;">
+                    <a onclick="myFunction(this.id)" id="@i" class="popup" style="cursor: pointer;">
+
+                        <span class="popuptext" id="myPopup">
+                            <span>@filename </span>
+                            <br>
+                            <span>    @fileSizeInBytes kb</span>
+                            <br />
+                            <span> @fi.CreationTime</span>
+                        </span>
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                        </svg>
+                    </a>
+                </div>
+
+            </div>
         </div>
-        <div>
-            @{
-                <h4>Total Amount: @amount.ToString("0.00")</h4>
-            }
-            <br />
-            <br />
-        </div>
-        <div>
-            @foreach (var item in Model.Medias)
-            {
-                <img src="@item.ImagePath" style="height:200px;width:200px;" />
-            }
+    </b>
+
+
+
+</div> 
+            } 
+                        }
             <br />
             <br />
         </div>
@@ -173,4 +235,96 @@
             </div>
         </div>
     </div>
-}
+    </div>
+    }
+
+<script>
+
+
+    function myFunction(id) {
+        var popup = document.getElementsByClassName("popuptext")[id];
+        popup.classList.toggle("show");
+        console.log("clicked");
+    }
+</script>
+    <style>
+
+        /***********Status ********/
+        .btn.btn-success.approved2 {
+            pointer-events: none;
+            background: #399d19;
+        }
+
+        .btn.btn-success.rejected2 {
+            pointer-events: none;
+            background: red;
+            border: solid 2px red;
+            color: white;
+        }
+
+        .btn.rejectbtn2 {
+            background: white;
+            border: solid 2px red;
+            color: red;
+            pointer-events: All;
+        }
+
+        .btn.approvebtn {
+            background: white;
+            border: solid 2px #399d19;
+            color: #399d19;
+            pointer-events: all;
+        }
+
+        /* Popup container - can be anything you want */
+        .popup {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+            /* The actual popup */
+            .popup .popuptext {
+                visibility: hidden;
+                width: 160px;
+                background-color: #555;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 8px 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 117%;
+                left: -73px;
+            }
+
+                /* Popup arrow */
+                .popup .popuptext::after {
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: #555 transparent transparent transparent;
+                }
+
+            /* Toggle this class - hide and show the popup */
+            .popup .show {
+                visibility: visible;
+                -webkit-animation: fadeIn 1s;
+                animation: fadeIn 1s;
+            }
+
+            .popup .hide {
+                visibility: hidden;
+                -webkit-animation: fadeIn 1s;
+                animation: fadeIn 1s;
+            }
+
+    </style>
