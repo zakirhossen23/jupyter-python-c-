@@ -288,7 +288,7 @@
 
                         </div>}
                     @{
-                        if (role.Equals(Reimbursement_Web_System.Models.Role.HR))
+                        if (role.Equals(Reimbursement_Web_System.Models.Role.HR) || role.Equals(Reimbursement_Web_System.Models.Role.HSU))
                         {
 
                             <div id="beforetheadd" style="float: left;width: 70px;height: 59px;margin: 5px;">
@@ -334,13 +334,7 @@
                             @Html.EditorFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.HSURemarks, "", new { @class = "text-danger" })
                         </div>
-                        <div>
-                            <br />
-                            <br />
-                            @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
-                            <br />
-                            <br />
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -364,13 +358,7 @@
                             @Html.EditorFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.HRRemarks, "", new { @class = "text-danger" })
                         </div>
-                        <div>
-                            <br />
-                            <br />
-                            @Html.TextBoxFor(model => model.ImagesUpload, new { type = "file", multiple = "multiple", accept = "image/jpeg, image/jpg, image/png" })
-                            <br />
-                            <br />
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -688,7 +676,7 @@
                 const addbtndiv = document.getElementById("beforetheadd")
                 const filename = file.name;
          addbtndiv.insertAdjacentHTML('beforebegin',
-'<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px;"><k style="align-content: end;color: black;">' +  +'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' +
+'<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px; overflow: hidden;"><k style="align-content: end;color: black;">' +  +'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' +
 file.name + '</k></div><div style="padding: 20px 7px 13px 0px; width: 21px;"><a onclick="myFunction(this.id)" id="' +
 $('[class="popup"]').length+ '" class="popup" style="cursor: pointer;"><span class="popuptext" id="myPopup"><span>' +
 file.name + '</span><br><span>' +

@@ -57,7 +57,7 @@
 
             </dl>
 
-
+            <input id="filesnames" name="filesnames" value="">
             <button type="submit" name="command" value="SaveImage" class="btn btn-success" id="imageuploadbtn" class="btn" style="border: solid #5cb85c;width: 21%;">Yes</button>}
 
     }
@@ -204,9 +204,12 @@
             {
 
                 <div class="image-container" style="margin: 5px; float: left; position: relative">
-                    @Html.HiddenFor(model => Model.Medias[i].Id, new { @class = "media-id" })
-                    @Html.HiddenFor(model => Model.Medias[i].ImagePath)
-                    @Html.HiddenFor(model => Model.Medias[i].TicketCRF)
+                    <div hidden>
+                        @Html.EditorFor(model => Model.Medias[i].Id, new { @class = "media-id" })
+                        @Html.EditorFor(model => Model.Medias[i].ImagePath)
+                        @Html.EditorFor(model => Model.Medias[i].TicketCRF)
+                    </div>
+               
 
                     <button type="button" class="delete-image close" aria-label="Delete" style="top: 0; right: 0; position: absolute; ">
                         <span aria-hidden="true">&times;</span>
@@ -394,8 +397,8 @@
             });
 
             $('.delete-image').click(function (event) {
-                event.currentTarget.parentElement.remove();
-                event.currentTarget.parentElement.firstElementChild.remove();
+                event.currentTarget.parentElement.style="display:none;";
+                event.currentTarget.parentElement.firstElementChild.children[1].setAttribute("value" , "");
             });
         });
     var imageupload = document.getElementById("ImagesUpload");
@@ -416,9 +419,18 @@
     }
 
     imageupload.onchange = ({ target }) => {
-
-
+              
         let allfiles = target.files;
+        var sendingnames = []
+        for (let i = 0; i < allfiles.length; i++) {
+            var currentdate = new Date();
+            let fileName = allfiles[i].name
+            var newfile = fileName.substring(0, fileName.indexOf('.')) + "_" + currentdate.getMilliseconds() + "-" + currentdate.getSeconds() + "-" + currentdate.getMinutes() + "-" + currentdate.getHours() + "-" + currentdate.getDate() + "." + fileName.substring(fileName.indexOf('.') + 1)
+            sendingnames.push(newfile)
+        }
+        document.getElementsByName("filesnames")[0].value = sendingnames.join("#")
+
+
         for (let i = 0; i < allfiles.length; i++) {
             var currentdate = new Date();
             let file = allfiles[i];

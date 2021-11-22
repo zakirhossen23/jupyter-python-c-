@@ -178,19 +178,48 @@ namespace Reimbursement_Web_System.Controllers
                         var dbTicket = context.Ticket
                             .Where(x => x.CRF == ticket.CRF)
                             .SingleOrDefault();
-                        //remove all medias 
-                        var medias = context.Media
+                        if (ticket.Medias != null)
+                        {
+                            List<string> allimagepath = new List<string> { }; 
+                            for (int i = 0; i  < ticket.Medias.Count();i++)
+                            {
+                                if (ticket.Medias[i].ImagePath != null)
+                                {
+                                    allimagepath.Add(ticket.Medias[i].ImagePath);
+                                }
+                               
+
+                            }
+                            //allmedias
+                            var allmedias = context.Media
                           .Where(s => s.Ticket.CRF == ticket.CRF)
                           .Select(p => p).ToList();
-                        context.Media.RemoveRange(medias);
+                            //listed medias
+                            var medias = context.Media
+                          .Where(s => s.Ticket.CRF == ticket.CRF)
+                          .Select(p => p).ToList();
+
+                            for (int i = 0; i < medias.Count(); i++)
+                            {
+                                if (allimagepath.Where(x => x == (medias[i].ImagePath)).Count() == 0)
+                                {
+                                    medias.Remove(medias[i]);
+                                    i--;
+                                }
+                            }
+
+                                //remove all medias
+                                context.Media.RemoveRange(allmedias);
                         context.SaveChanges();
 
                         //same code in create. please refer in line #108
                       //add the medias in the media model
-                        context.Media.AddRange(ticket.Medias);
+                        context.Media.AddRange(medias);
 
                         //save the database
                         context.SaveChanges();
+                        }
+                     
                         //update the time
                         dbTicket.UpdateDateFiled = DateTime.Now;
                         ticket.UpdateDateFiled = DateTime.Now;
@@ -246,7 +275,7 @@ namespace Reimbursement_Web_System.Controllers
             }
         }
 
-        public ActionResult UpdateTicket(Ticket ticket, string command)
+        public ActionResult UpdateTicket(Ticket ticket, string command, string filesnames)
         {
             //remove username and password validation because it's not part of the ticket
             ModelState.Remove("User.Username");
@@ -278,8 +307,8 @@ namespace Reimbursement_Web_System.Controllers
                     {
                         string uploadDir = "Ticket_Images";
                         string fileName;
-                        foreach (var rec in ticket.ImagesUpload)
-                        {
+                        for (int i = 0; i < ticket.ImagesUpload.Count(); i++) {
+                            var rec = ticket.ImagesUpload[i];
                             if (rec != null)
                             {
                                 fileName = Path.GetFileName(rec.FileName);
@@ -291,6 +320,7 @@ namespace Reimbursement_Web_System.Controllers
                                 }); ;
                             }
                         }
+
 
 
                         //update the existing ticket to the new ticket

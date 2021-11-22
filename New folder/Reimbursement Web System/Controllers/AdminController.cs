@@ -263,36 +263,7 @@ namespace Reimbursement_Web_System.Controllers
                     }
                     else if (role.Equals(Role.HSU))
                     {
-                        //get the existing ticket
-                        var dbTicket = context.Ticket
-                            .Where(x => x.CRF == ticket.CRF)
-                            .SingleOrDefault();
-
-                        //same code in create. please refer in line #108
-                        if (ticket.ImagesUpload.Count() != 0)
-                        {
-                            string uploadDir = "Ticket_Images";
-                            string fileName;
-                            foreach (var rec in ticket.ImagesUpload)
-                            {
-                                if (rec != null)
-                                {
-                                    fileName = Path.GetFileName(rec.FileName);
-                                    fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
-                                    rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
-                                    dbTicket.Medias.Add(new Media
-                                    {
-                                        ImagePath = "/" + uploadDir + "/" + fileName
-                                    }); ;
-                                }
-                            }
-                        }
-
-                        //update the existing ticket to the new ticket
-                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
-
-                        //save in database
-                        context.SaveChanges();
+                    
                         if (command.Equals("Approve")) { ticket.Status = Status.HSUApproved; ticket.HSUStatus = "Approved"; ticket.HRStatus = "active"; } // if the user is a director marked the ticket as HSUApproved
                         else
                         {
