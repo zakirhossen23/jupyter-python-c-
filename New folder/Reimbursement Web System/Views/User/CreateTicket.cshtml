@@ -191,9 +191,9 @@
     <br />
     <br />
 </div>
-                }
-                else
-                {
+    }
+    else
+    {
 <div style="display:table;">
     <div style="width: 104%;margin-left: -20px;">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900">
@@ -271,7 +271,7 @@
 
 
 </div>
-                }
+                                        }
 
        
         
@@ -380,7 +380,12 @@
 </script>
 <script type="text/javascript">
     var uploadedint = 0;
-    var allimage = @Model.Medias.Count()
+    @{int imageinit = 0; if (Model.Medias != null) { imageinit= Model.Medias.Count(); }  }
+    var allimage;
+       var pagetitle = "@ViewBag.PageTitle";
+
+    allimage = @imageinit ;
+
         $(function () {
             $('.reimbursement-modal').click(function () {
                 var purpose = $('.Purpose').val();

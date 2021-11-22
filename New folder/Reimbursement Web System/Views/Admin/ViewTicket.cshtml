@@ -678,7 +678,7 @@
          addbtndiv.insertAdjacentHTML('beforebegin',
              '<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px; overflow: hidden;"><k style="align-content: end;color: black;">' +
              file.name
-             + '</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' + file.size
+             + '</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' + formatBytes(file.size, 0)
 + '</k></div><div style="padding: 20px 7px 13px 0px; width: 21px;"><a onclick="myFunction(this.id)" id="' +
 $('[class="popup"]').length+ '" class="popup" style="cursor: pointer;"><span class="popuptext" id="myPopup"><span>' +
 file.name + '</span><br><span>' +
