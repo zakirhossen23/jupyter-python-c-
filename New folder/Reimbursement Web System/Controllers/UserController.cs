@@ -306,17 +306,16 @@ namespace Reimbursement_Web_System.Controllers
                     if (ticket.ImagesUpload.Count() != 0)
                     {
                         string uploadDir = "Ticket_Images";
-                        string fileName;
+                    
+                        string[] fileName =  filesnames.Split('#');
                         for (int i = 0; i < ticket.ImagesUpload.Count(); i++) {
                             var rec = ticket.ImagesUpload[i];
                             if (rec != null)
                             {
-                                fileName = Path.GetFileName(rec.FileName);
-                                fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
-                                rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
+                                  rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName[i]));
                                 dbTicket.Medias.Add(new Media
                                 {
-                                    ImagePath = "/" + uploadDir + "/" + fileName
+                                    ImagePath = "/" + uploadDir + "/" + fileName[i]
                                 }); ;
                             }
                         }

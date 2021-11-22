@@ -380,6 +380,7 @@
 </script>
 <script type="text/javascript">
     var uploadedint = 0;
+    var allimage = @Model.Medias.Count()
         $(function () {
             $('.reimbursement-modal').click(function () {
                 var purpose = $('.Purpose').val();
@@ -419,7 +420,7 @@
     }
 
     imageupload.onchange = ({ target }) => {
-              
+
         let allfiles = target.files;
         var sendingnames = []
         for (let i = 0; i < allfiles.length; i++) {
@@ -428,7 +429,7 @@
             var newfile = fileName.substring(0, fileName.indexOf('.')) + "_" + currentdate.getMilliseconds() + "-" + currentdate.getSeconds() + "-" + currentdate.getMinutes() + "-" + currentdate.getHours() + "-" + currentdate.getDate() + "." + fileName.substring(fileName.indexOf('.') + 1)
             sendingnames.push(newfile)
         }
-        document.getElementsByName("filesnames")[0].value = sendingnames.join("#")
+        document.getElementsByName("filesnames")[0].setAttribute("value" , sendingnames.join("#"))
 
 
         for (let i = 0; i < allfiles.length; i++) {
@@ -439,9 +440,12 @@
                 const result = reader.result;
                 const addbtndiv = document.getElementById("beforetheadd")
                 const filename = file.name;
+                var imageid = (allimage - 1);
+                var hiddenelement = '<div hidden><input name="Medias[' + imageid + '].ImagePath" type="text" value="/Ticket_Images/' + sendingnames[i]+'"></div>'
                 addbtndiv.insertAdjacentHTML('beforebegin',
-                    '<div class="image-container" style="margin: 5px; float: left; position: relative"><b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px; overflow: hidden;"><k style="align-content: end;color: black;">' + +'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">' +
-                    file.name + '</k></div><div style="padding: 20px 7px 13px 0px; width: 21px;"><a onclick="myFunction(this.id)" id="' +
+                    '<div class="image-container" style="margin: 5px; float: left; position: relative">' + hiddenelement+'<b class="images"> <div style="display: flex;"><a style="background: #dadcdb;display: -webkit-box;width: 52px;cursor: pointer;"><div class="ion-paperclip" style="height: 30px;width: 30px;font-size: 32px;transform: rotate(90deg);margin: 25px -10px 0px 18px;"> </div></a><div style="display: flex;background: #e7e7e7;"><div style="padding: 9px 0px 0px 0px; width: 152px; overflow: hidden;"><k style="align-content: end;color: black;">' +
+                    filename+'</k><br><k style="margin: -19px -2px 5px 5px;color: black;font-weight: normal;">'
+                    + formatBytes(file.size, 0) + '</k></div><div style="padding: 20px 7px 13px 0px; width: 21px;"><a onclick="myFunction(this.id)" id="' +
                     $('[class="popup"]').length + '" class="popup" style="cursor: pointer;"><span class="popuptext" id="myPopup"><span>' +
                     file.name + '</span><br><span>' +
                     formatBytes(file.size, 0) + '</span><br><span>' +
@@ -453,7 +457,7 @@
                     + currentdate.getSeconds() + '</span></span><svg width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path></svg></a></div></div></div></b></div>');
             }
             reader.readAsDataURL(file);
-
+            allimage++;
         }
         var pagetitle = "@ViewBag.PageTitle";
         if (pagetitle != "Create Ticket") {
