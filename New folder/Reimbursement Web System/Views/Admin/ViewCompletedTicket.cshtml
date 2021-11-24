@@ -147,7 +147,7 @@
                                                 <a onclick="myFunction(this.id)" id="@i" class="popup" style="cursor: pointer;">
 
                                                     <span class="popuptext" id="myPopup">
-                                                        <span>@filename </span>
+                                                        <span>@Path.GetFileName(Model.Medias[i].ImagePath) </span>
                                                         <br>
                                                         <span>    @fileSizeInBytes kb</span>
                                                         <br />
@@ -351,6 +351,8 @@
                         visibility: visible;
                         -webkit-animation: fadeIn 1s;
                         animation: fadeIn 1s;
+                        overflow: hidden;
+                        padding: 6px 6px 5px 6px;
                     }
 
                     .popup .hide {

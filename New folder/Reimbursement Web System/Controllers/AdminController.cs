@@ -167,7 +167,7 @@ namespace Reimbursement_Web_System.Controllers
         }
 
 
-        public ActionResult UpdateTicket(Ticket ticket, string command)
+        public ActionResult UpdateTicket(Ticket ticket, string command, string filesnames)
         {
             //remove username and password validation because it's not part of the ticket
             ModelState.Remove("User.Username");
@@ -198,17 +198,17 @@ namespace Reimbursement_Web_System.Controllers
                     if (ticket.ImagesUpload.Count() != 0)
                     {
                         string uploadDir = "Ticket_Images";
-                        string fileName;
-                        foreach (var rec in ticket.ImagesUpload)
+
+                        string[] fileName = filesnames.Split('#');
+                        for (int i = 0; i < ticket.ImagesUpload.Count(); i++)
                         {
+                            var rec = ticket.ImagesUpload[i];
                             if (rec != null)
                             {
-                                fileName = Path.GetFileName(rec.FileName);
-                                fileName = fileName.Substring(0, fileName.IndexOf('.')) + "_" + DateTime.Now.Millisecond + "-" + DateTime.Now.Second + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Hour + "." + fileName.Substring(fileName.IndexOf('.') + 1);
-                                rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName));
+                                rec.SaveAs(Path.Combine(Server.MapPath("~/" + uploadDir), fileName[i]));
                                 dbTicket.Medias.Add(new Media
                                 {
-                                    ImagePath = "/" + uploadDir + "/" + fileName
+                                    ImagePath = "/" + uploadDir + "/" + fileName[i]
                                 }); ;
                             }
                         }
@@ -216,17 +216,11 @@ namespace Reimbursement_Web_System.Controllers
 
                         //update the existing ticket to the new ticket
                         context.Entry(dbTicket).CurrentValues.SetValues(ticket);
-
+dbTicket.UpdateDateFiled = DateTime.Now;
+                        ticket.UpdateDateFiled = DateTime.Now;
                         //save in database
                         context.SaveChanges();
                         //update the time
-                        dbTicket.UpdateDateFiled = DateTime.Now;
-                        ticket.UpdateDateFiled = DateTime.Now;
-                        //update the existing ticket to the new ticket
-                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
-
-                        //save in database
-                        context.SaveChanges();
 
                     }
 
@@ -247,25 +241,54 @@ namespace Reimbursement_Web_System.Controllers
                 using (var context = new ReimbursementContext()) //initialize database
                 {
 
-                    //get the reimbursement data from the database
-                    var oldReimbursement = context.Reimbursement
-                                .Where(s => s.TicketCRF == ticket.CRF)
-                                .Select(p => p).ToList();
+           
+                    if (ticket.Medias != null)
+                    {
+                        List<string> allimagepath = new List<string> { };
+                        for (int i = 0; i < ticket.Medias.Count(); i++)
+                        {
+                            if (ticket.Medias[i].ImagePath != null)
+                            {
+                                allimagepath.Add(ticket.Medias[i].ImagePath);
+                            }
 
 
-                    //remove all the reimbursement data
-                    context.Reimbursement.RemoveRange(oldReimbursement);
+                        }
+                        //allmedias
+                        var allmedias = context.Media
+                      .Where(s => s.Ticket.CRF == ticket.CRF)
+                      .Select(p => p).ToList();
+                        //listed medias
+                        var medias = context.Media
+                      .Where(s => s.Ticket.CRF == ticket.CRF)
+                      .Select(p => p).ToList();
 
-                    //save to database
-                    context.SaveChanges();
+                        for (int i = 0; i < medias.Count(); i++)
+                        {
+                            if (allimagepath.Where(x => x == (medias[i].ImagePath)).Count() == 0)
+                            {
+                                medias.Remove(medias[i]);
+                                i--;
+                            }
+                        }
+
+                        //remove all medias
+                        context.Media.RemoveRange(allmedias);
+                        context.SaveChanges();
+
+                        //same code in create. please refer in line #108
+                        //add the medias in the media model
+                        context.Media.AddRange(medias);
+
+                        //save the database
+                        context.SaveChanges();
+                    }
+
 
                     //get the Ticket data from the database
                     var oldobj = context.Ticket.Where(x => x.CRF == ticket.CRF).SingleOrDefault();
 
-                    //modify the existing Reimbursement and readd the Reimbursement from the UI
-                    oldobj.Reimbursement.AddRange(ticket.Reimbursement);
-
-
+               
                     if (role.Equals(Role.Director))
                     {
                         if (command.Equals("Approve")) { ticket.Status = Status.DirectorApproved; ticket.DirectorStatus = "Approved"; ticket.HSUStatus = "active"; } // if the user is a director marked the ticket as DirectorApproved
