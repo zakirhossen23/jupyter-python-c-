@@ -171,119 +171,119 @@
                     <br />
                     <br />
                 </div>
+            </div>
+            <br />
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.DirectorRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.DirectorInternalComments)
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                                    <br />
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.DirectorRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.DirectorRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.DirectorRemarks)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.DirectorInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.DirectorInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.DirectorInternalComments)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.HSURemarks)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.HSUInternalComments)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.HRRemarks)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.HRInternalComments)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.SDASRemarks)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.SDASInternalComments)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.FinanceRemarks)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                    <div class="col-md-10">
-                                                        @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.HiddenFor(model => model.FinanceInternalComments)
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HSURemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HSURemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HSURemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HSUInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HSUInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HSUInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HRRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HRRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HRRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HRInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.HRInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.HRInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SDASRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.SDASRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.SDASRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SDASInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.SDASInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.SDASInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FinanceRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.FinanceRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.FinanceRemarks)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FinanceInternalComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DisplayFor(model => model.FinanceInternalComments, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.FinanceInternalComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
                                 <br />
         </div>
                             }

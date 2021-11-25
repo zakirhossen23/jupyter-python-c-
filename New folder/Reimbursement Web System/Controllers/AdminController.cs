@@ -214,8 +214,6 @@ namespace Reimbursement_Web_System.Controllers
                         }
 
 
-                        //update the existing ticket to the new ticket
-                        context.Entry(dbTicket).CurrentValues.SetValues(ticket);
 dbTicket.UpdateDateFiled = DateTime.Now;
                         ticket.UpdateDateFiled = DateTime.Now;
                         //save in database
@@ -282,6 +280,18 @@ dbTicket.UpdateDateFiled = DateTime.Now;
 
                         //save the database
                         context.SaveChanges();
+
+                        var reimbursement = context.Reimbursement
+                      .Where(s => s.Ticket.CRF == ticket.CRF)
+                      .Select(p => p).ToList();
+                        context.Reimbursement.RemoveRange(reimbursement);
+                        context.SaveChanges();
+                        //add the tickets in the Reimbursement model
+                        context.Reimbursement.AddRange(ticket.Reimbursement);
+
+                        //save the database
+                        context.SaveChanges();
+
                     }
 
 
