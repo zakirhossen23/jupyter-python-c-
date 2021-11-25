@@ -292,6 +292,8 @@ dbTicket.UpdateDateFiled = DateTime.Now;
                         //save the database
                         context.SaveChanges();
 
+
+                      
                     }
 
 
@@ -336,9 +338,15 @@ dbTicket.UpdateDateFiled = DateTime.Now;
                             ticket.DateCompleted = DateTime.Now; // modify the data completed to date today
                         }
                         else { ticket.Status = Status.FinanceRejected; ticket.FinanceStatus = "Rejected"; }
-                    }
+                    } 
+                    //update the time
+                    ticket.UpdateDateFiled = DateTime.Now;
+
                     context.Entry(oldobj).CurrentValues.SetValues(ticket); //change the old ticket to the new ticket
                     context.SaveChanges(); // save to database
+                  
+                                      
+                    
 
                     //add the event in the notification
                     context.Notification.Add(new Notification
