@@ -1,4 +1,4 @@
-Row_ID,Order ID,Request Date,Completion_Date,Customer_ID,Customer_Name
+Row_ID,Order_ID,Request_Date,Completion_Date,Customer ID,Customer_Name
 1,CA-2017-152156,8/11/2017,11/11/2017,CG-12520,Claire Gute
 2,CA-2017-152156,8/11/2017,11/11/2017,CG-12520,Claire Gute
 3,CA-2017-138688,12/6/2017,16/06/2017,DV-13045,Darrin Van Huff
